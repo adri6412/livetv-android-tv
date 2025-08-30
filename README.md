@@ -79,10 +79,10 @@ app/
 1. **Launch the application** on Android TV
 2. **Go to Settings** (MENU key)
 3. **Configure Playlist**:
-   - Remote URL: `http://tvheadend-server:9981/playlist`
+   - Remote URL: `http://example-server:9981/playlist`
    - Local file: Select M3U file from storage
 4. **Configure EPG** (optional):
-   - XMLTV URL: `http://tvheadend-server:9981/xmltv`
+   - XMLTV URL: `http://example-server:9981/xmltv`
 5. **Test configuration** with "Test Playlist" button
 6. **Save settings**
 
@@ -90,13 +90,13 @@ app/
 To use with TVHeadend, configure:
 ```
 # M3U Playlist
-http://[server]:9981/playlist/channels.m3u
+http://[example-server]:9981/playlist/channels.m3u
 
 # EPG XMLTV  
-http://[server]:9981/xmltv/channels.xml
+http://[example-server]:9981/xmltv/channels.xml
 
 # Stream passthrough
-http://[server]:9981/stream/channel/[uuid]
+http://[example-server]:9981/stream/channel/[uuid]
 ```
 
 ## Usage
@@ -131,10 +131,10 @@ http://[server]:9981/stream/channel/[uuid]
 ```m3u
 #EXTM3U
 #EXTINF:-1 tvg-id="rai1" tvg-name="Rai 1" tvg-logo="logo.png" group-title="Rai",Rai 1 HD
-http://server:9981/stream/channel/uuid1
+http://example-server:9981/stream/channel/uuid1
 
 #EXTINF:-1 tvg-id="canale5" tvg-name="Canale 5",Canale 5 HD
-http://server:9981/stream/channel/uuid2
+http://example-server:9981/stream/channel/uuid2
 ```
 
 ### 📋 EPG XMLTV

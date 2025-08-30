@@ -89,7 +89,7 @@ val customTsExtractor = TsExtractor(
 #### 1. Rai 1 (or any HTTP HbbTV broadcaster)
 **Expected Result**: AIT detected within ~2 seconds, full URL logged
 ```
-🎯 HbbTV URL found: https://www.raiplay.it/hbbtv/rai1 (autostart: true)
+🎯 HbbTV URL found: https://www.example-broadcaster.com/hbbtv/channel1 (autostart: true)
 ```
 
 #### 2. Services with only DSM-CC
@@ -110,8 +110,8 @@ val customTsExtractor = TsExtractor(
 ```
 MyTsPayloadReaderFactory: 🎯 DVB Section stream detected on PID 0x1234 - creating AIT parser
 AitSectionPayloadReader: Processing AIT section: 256 bytes
-AitSectionPayloadReader: HbbTV URL found: https://example.com/app (autostart: true)
-PlayerActivity: 🎯 HbbTV URL found from AIT parsing: https://example.com/app
+AitSectionPayloadReader: HbbTV URL found: https://www.example-broadcaster.com/hbbtv/app (autostart: true)
+PlayerActivity: 🎯 HbbTV URL found from AIT parsing: https://www.example-broadcaster.com/hbbtv/app
 ```
 
 **PID Discovery**:
@@ -128,7 +128,7 @@ AIT section: syntax_indicator=true, length=256
 AIT application loop length: 128
 App: orgId=0x12345678, appId=0x1234, control=0x01, autostart=true, descriptors_length=64
 Transport protocol: protocol_id=0x0003, profile=0x0001
-URL base: https://www.example.com
+URL base: https://www.example-broadcaster.com
 Initial path: /hbbtv/app
 ```
 
