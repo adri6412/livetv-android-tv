@@ -232,7 +232,13 @@ adb logcat | grep "LiveTV"
 
 ## License
 
-This project is released under MIT license. See `LICENSE` file for details.
+This project is released under Mozilla Public License 2.0 (MPL 2.0). See `LICENSE` file for details.
+
+### Key Points of MPL 2.0:
+- ✅ **Commercial use allowed** - Companies can use and sell products with LiveTV
+- ✅ **File-level copyleft** - Only modified files must be shared back
+- ✅ **Linking freedom** - Can be linked with proprietary software
+- ✅ **Contributions protected** - Modifications to LiveTV files must be shared
 
 ## Contributing
 
