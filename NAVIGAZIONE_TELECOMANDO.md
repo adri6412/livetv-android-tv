@@ -1,156 +1,156 @@
-# 🎮 Navigazione Impostazioni con Telecomando
+# 🎮 Settings Navigation with Remote Control
 
-## Panoramica
+## Overview
 
-Le impostazioni di LiveTV sono state ottimizzate per una navigazione intuitiva con il telecomando di Android TV. Ora è molto più facile navigare tra tutte le opzioni senza dover "cercare" i controlli.
+LiveTV settings have been optimized for intuitive navigation with Android TV remote control. It's now much easier to navigate through all options without having to "search" for controls.
 
-## 🎯 Layout Ottimizzato
+## 🎯 Optimized Layout
 
-### Header Centrato
-- **Titolo centrato** per una migliore visibilità
-- **Pulsanti principali** (Indietro e Salva) posizionati in alto al centro
-- **Navigazione verticale** invece che orizzontale per evitare problemi di focus
+### Centered Header
+- **Centered title** for better visibility
+- **Main buttons** (Back and Save) positioned at the top center
+- **Vertical navigation** instead of horizontal to avoid focus issues
 
-### Controlli Riorganizzati
-- **Tutti i pulsanti** ora occupano la larghezza completa
-- **Disposizione verticale** per una navigazione lineare
-- **Spaziatura ottimizzata** tra i controlli
+### Reorganized Controls
+- **All buttons** now occupy full width
+- **Vertical arrangement** for linear navigation
+- **Optimized spacing** between controls
 
-## 🕹️ Navigazione con Telecomando
+## 🕹️ Remote Control Navigation
 
-### Pulsanti di Navigazione
-- **⬆️ SU**: Vai al controllo precedente
-- **⬇️ GIÙ**: Vai al controllo successivo
-- **⬅️ SINISTRA**: Naviga tra opzioni orizzontali (se presenti)
-- **➡️ DESTRA**: Naviga tra opzioni orizzontali (se presenti)
+### Navigation Buttons
+- **⬆️ UP**: Go to previous control
+- **⬇️ DOWN**: Go to next control
+- **⬅️ LEFT**: Navigate between horizontal options (if present)
+- **➡️ RIGHT**: Navigate between horizontal options (if present)
 
-### Pulsanti di Azione
-- **OK/ENTER**: Attiva il controllo in focus
-- **CENTRO**: Attiva il controllo in focus
-- **BACK**: Torna indietro
+### Action Buttons
+- **OK/ENTER**: Activate focused control
+- **CENTER**: Activate focused control
+- **BACK**: Go back
 
-## 🗺️ Ordine di Navigazione
+## 🗺️ Navigation Order
 
-### 1. Header (Navigazione Principale)
+### 1. Header (Main Navigation)
 ```
-⬅️ Indietro → 💾 Salva
+⬅️ Back → 💾 Save
 ```
 
-### 2. Sezione Playlist
+### 2. Playlist Section
 ```
-📝 URL Playlist
-📁 Seleziona File
+📝 Playlist URL
+📁 Select File
 🧪 Test Playlist
-📊 Canali Trovati
+📊 Channels Found
 ```
 
-### 3. Sezione EPG
+### 3. EPG Section
 ```
-📺 Guida TV (EPG)
-```
-
-### 4. Sezione HbbTV (DISATTIVATO)
-```
-📡 HbbTV Abilitato (non funzionale)
+📺 TV Guide (EPG)
 ```
 
-### 5. Sezione Avvio Automatico 🚀
+### 4. HbbTV Section (DISABLED)
 ```
-✅ Avvio all'Accensione
-✅ Avvio al Risveglio
-✅ Servizio Background
-✅ App Predefinita
-🧪 Test Avvio
-🔋 Ottimizzazioni Batteria
+📡 HbbTV Enabled (non-functional)
 ```
 
-### 6. Sezione Sistema
+### 5. Auto Start Section 🚀
 ```
-🗑️ Cancella Cache
-ℹ️ Informazioni App
-🐛 Server Logcat
-```
-
-### 7. Sezione Logcat
-```
-▶️ Avvia Logcat
-⏹️ Ferma Logcat
+✅ Start on Power On
+✅ Start on Wake Up
+✅ Background Service
+✅ Default App
+🧪 Test Start
+🔋 Battery Optimizations
 ```
 
-## ✨ Funzionalità di Navigazione
+### 6. System Section
+```
+🗑️ Clear Cache
+ℹ️ App Information
+🐛 Logcat Server
+```
 
-### Focus Visivo Migliorato
-- **Controllo in focus** viene evidenziato visivamente
-- **Scala aumentata** (1.05x) per il controllo attivo
-- **Opacità ridotta** (0.8) per i controlli non attivi
-- **Transizioni fluide** tra i controlli
+### 7. Logcat Section
+```
+▶️ Start Logcat
+⏹️ Stop Logcat
+```
 
-### Navigazione Circolare
-- **Ultimo controllo** → **Primo controllo** (e viceversa)
-- **Nessun "vicolo cieco"** nella navigazione
-- **Flusso continuo** tra tutte le opzioni
+## ✨ Navigation Features
 
-### Focus Automatico
-- **Focus iniziale** sul pulsante Indietro
-- **Ordine logico** di navigazione dall'alto verso il basso
-- **Raggruppamento intelligente** per sezioni correlate
+### Improved Visual Focus
+- **Focused control** is visually highlighted
+- **Increased scale** (1.05x) for active control
+- **Reduced opacity** (0.8) for inactive controls
+- **Smooth transitions** between controls
 
-## 🔧 Suggerimenti per l'Uso
+### Circular Navigation
+- **Last control** → **First control** (and vice versa)
+- **No "dead ends"** in navigation
+- **Continuous flow** between all options
 
-### Navigazione Rapida
-1. **Inizia dall'alto** - i controlli principali sono sempre accessibili
-2. **Usa SU/GIÙ** per navigare verticalmente
-3. **Usa OK/ENTER** per attivare i controlli
-4. **Usa BACK** per tornare indietro
+### Automatic Focus
+- **Initial focus** on Back button
+- **Logical order** of navigation from top to bottom
+- **Smart grouping** for related sections
 
-### Per Impostazioni Frequenti
-- **Avvio automatico**: Sezione dedicata in alto
-- **Playlist**: Prima sezione per accesso rapido
-- **Sistema**: Ultima sezione per operazioni di manutenzione
+## 🔧 Usage Tips
 
-### Per Test e Debug
-- **Test avvio automatico**: Pulsante dedicato nella sezione avvio
-- **Logcat**: Controlli dedicati nella sezione logcat
-- **Cache**: Pulsante dedicato nella sezione sistema
+### Quick Navigation
+1. **Start from top** - main controls are always accessible
+2. **Use UP/DOWN** to navigate vertically
+3. **Use OK/ENTER** to activate controls
+4. **Use BACK** to go back
 
-## 🚨 Risoluzione Problemi
+### For Frequent Settings
+- **Auto start**: Dedicated section at top
+- **Playlist**: First section for quick access
+- **System**: Last section for maintenance operations
 
-### Il focus non si sposta correttamente
-1. **Verifica la batteria** del telecomando
-2. **Riavvia l'app** se necessario
-3. **Controlla i log** per debug
+### For Testing and Debug
+- **Auto start test**: Dedicated button in start section
+- **Logcat**: Dedicated controls in logcat section
+- **Cache**: Dedicated button in system section
 
-### Controllo non raggiungibile
-1. **Usa la navigazione verticale** (SU/GIÙ)
-2. **Verifica l'ordine di focus** configurato
-3. **Controlla che il controllo sia abilitato**
+## 🚨 Troubleshooting
 
-### Navigazione lenta
-1. **Riduci le animazioni** nelle impostazioni TV
-2. **Verifica la performance** dell'app
-3. **Pulisci la cache** se necessario
+### Focus doesn't move correctly
+1. **Check remote battery**
+2. **Restart app** if necessary
+3. **Check logs** for debug
 
-## 📱 Compatibilità
+### Control not reachable
+1. **Use vertical navigation** (UP/DOWN)
+2. **Verify focus order** configuration
+3. **Check that control is enabled**
 
-### Telecomandi Supportati
-- ✅ **Telecomando Android TV standard**
-- ✅ **Telecomando universale**
-- ✅ **Telecomando Bluetooth**
-- ✅ **App telecomando** (se supportata)
+### Slow navigation
+1. **Reduce animations** in TV settings
+2. **Check app performance**
+3. **Clear cache** if necessary
 
-### Versioni Android
+## 📱 Compatibility
+
+### Supported Remotes
+- ✅ **Standard Android TV remote**
+- ✅ **Universal remote**
+- ✅ **Bluetooth remote**
+- ✅ **Remote app** (if supported)
+
+### Android Versions
 - ✅ **Android 7.0+** (API 24+)
 - ✅ **Android TV 7.0+**
-- ✅ **Fire TV** (compatibilità limitata)
+- ✅ **Fire TV** (limited compatibility)
 
-## 🎉 Vantaggi della Nuova Navigazione
+## 🎉 Benefits of New Navigation
 
-1. **Più intuitiva** - ordine logico dall'alto verso il basso
-2. **Più veloce** - nessun "cercare" i controlli
-3. **Più accessibile** - tutti i controlli sempre raggiungibili
-4. **Più visiva** - focus chiaramente evidenziato
-5. **Più robusta** - navigazione circolare senza vicoli ciechi
+1. **More intuitive** - logical order from top to bottom
+2. **Faster** - no "searching" for controls
+3. **More accessible** - all controls always reachable
+4. **More visual** - focus clearly highlighted
+5. **More robust** - circular navigation without dead ends
 
 ---
 
-**Nota**: La navigazione è stata ottimizzata per il telecomando standard di Android TV. Per telecomandi personalizzati o app telecomando, la compatibilità può variare.
+**Note**: Navigation has been optimized for standard Android TV remote. For custom remotes or remote apps, compatibility may vary.

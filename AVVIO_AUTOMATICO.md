@@ -1,165 +1,165 @@
-# 🚀 Configurazione Avvio Automatico LiveTV
+# 🚀 LiveTV Auto Start Configuration
 
-## Panoramica
+## Overview
 
-LiveTV è configurato per avviarsi automaticamente all'accensione di Android TV e al risveglio dallo standby. Questa funzionalità garantisce che l'app sia sempre disponibile e pronta per l'uso.
+LiveTV is configured to start automatically when Android TV is powered on and when waking up from standby. This functionality ensures that the app is always available and ready to use.
 
-## ✨ Funzionalità
+## ✨ Features
 
-### 🔌 Avvio Automatico all'Accensione
-- L'app si avvia automaticamente quando la TV viene accesa
-- Configurabile tramite le impostazioni dell'app
-- Utilizza il servizio `AutoStartService` per gestire l'avvio
+### 🔌 Auto Start on Power On
+- App starts automatically when TV is turned on
+- Configurable through app settings
+- Uses `AutoStartService` to manage startup
 
-### 📺 Risveglio dallo Standby
-- L'app si riavvia automaticamente quando la TV esce dallo standby
-- Gestisce i cambiamenti di stato della TV (schermo acceso/spento)
-- Mantiene i servizi attivi in background
+### 📺 Wake Up from Standby
+- App restarts automatically when TV exits standby
+- Handles TV state changes (screen on/off)
+- Maintains active background services
 
-### 🔄 Aggiornamenti App
-- Riavvio automatico dei servizi dopo l'aggiornamento dell'app
-- Mantenimento delle impostazioni e dello stato
+### 🔄 App Updates
+- Automatic service restart after app update
+- Maintains settings and state
 
-## ⚙️ Configurazione
+## ⚙️ Configuration
 
-### 1. Impostazioni nell'App
+### 1. App Settings
 
-Apri le **Impostazioni** di LiveTV e vai alla sezione **🚀 Avvio Automatico**:
+Open LiveTV **Settings** and go to **🚀 Auto Start** section:
 
-- **Avvia automaticamente all'accensione della TV**: Abilita l'avvio automatico
-- **Avvia automaticamente al risveglio dallo standby**: Abilita il risveglio automatico
-- **Mantieni l'app attiva in background**: Mantiene i servizi attivi
-- **Imposta come app predefinita per la TV**: Configura l'app come predefinita
+- **Start automatically when TV is powered on**: Enable auto start
+- **Start automatically when waking up from standby**: Enable wake up auto start
+- **Keep app active in background**: Keep services active
+- **Set as default TV app**: Configure app as default
 
-### 2. Impostazioni di Sistema
+### 2. System Settings
 
-#### Ottimizzazioni Batteria
-1. Vai su **Impostazioni** → **App** → **LiveTV**
-2. Tocca **Batteria**
-3. Seleziona **Nessuna limitazione** o **Ottimizzazione manuale**
-4. Disabilita **Ottimizzazione batteria in background**
+#### Battery Optimizations
+1. Go to **Settings** → **Apps** → **LiveTV**
+2. Tap **Battery**
+3. Select **No restrictions** or **Manual optimization**
+4. Disable **Background battery optimization**
 
-#### Permessi di Avvio
-1. Vai su **Impostazioni** → **App** → **LiveTV**
-2. Tocca **Permessi**
-3. Abilita **Avvio automatico** e **Esecuzione in background**
+#### Startup Permissions
+1. Go to **Settings** → **Apps** → **LiveTV**
+2. Tap **Permissions**
+3. Enable **Auto start** and **Background execution**
 
-### 3. Impostazioni TV (Specifiche per Brand)
+### 3. TV Settings (Brand Specific)
 
 #### Xiaomi/Mi TV
-1. **Impostazioni** → **App** → **Gestione app**
-2. **LiveTV** → **Permessi** → **Avvio automatico** ✅
-3. **Impostazioni** → **Batteria e prestazioni** → **Gestione batteria**
-4. **LiveTV** → **Nessuna limitazione**
+1. **Settings** → **Apps** → **App management**
+2. **LiveTV** → **Permissions** → **Auto start** ✅
+3. **Settings** → **Battery & performance** → **Battery management**
+4. **LiveTV** → **No restrictions**
 
 #### Samsung TV
-1. **Impostazioni** → **App** → **Gestione app**
-2. **LiveTV** → **Permessi** → **Avvio automatico** ✅
-3. **Impostazioni** → **Generali** → **Modalità sviluppatore**
-4. **Modalità sviluppatore** → **ON**
+1. **Settings** → **Apps** → **App management**
+2. **LiveTV** → **Permissions** → **Auto start** ✅
+3. **Settings** → **General** → **Developer mode**
+4. **Developer mode** → **ON**
 
 #### LG TV
-1. **Impostazioni** → **Generali** → **App**
-2. **LiveTV** → **Permessi** → **Avvio automatico** ✅
-3. **Impostazioni** → **Generali** → **Modalità sviluppatore**
-4. **Modalità sviluppatore** → **ON**
+1. **Settings** → **General** → **Apps**
+2. **LiveTV** → **Permissions** → **Auto start** ✅
+3. **Settings** → **General** → **Developer mode**
+4. **Developer mode** → **ON**
 
-## 🔧 Componenti Tecnici
+## 🔧 Technical Components
 
 ### BootReceiver
-- Gestisce gli eventi di sistema (`BOOT_COMPLETED`, `SCREEN_ON`, etc.)
-- Avvia i servizi appropriati in base agli eventi
-- Priorità alta per garantire l'esecuzione
+- Handles system events (`BOOT_COMPLETED`, `SCREEN_ON`, etc.)
+- Starts appropriate services based on events
+- High priority to ensure execution
 
 ### AutoStartService
-- Servizio foreground per l'avvio automatico
-- Gestisce l'avvio di MainActivity
-- Mantiene l'app attiva in background
+- Foreground service for auto start
+- Manages MainActivity startup
+- Keeps app active in background
 
 ### BackgroundService
-- Mantiene i servizi attivi
-- Gestisce i cambiamenti di stato della TV
-- Utilizza wake lock per mantenere l'attività
+- Keeps services active
+- Handles TV state changes
+- Uses wake lock to maintain activity
 
-## 📱 Test e Verifica
+## 📱 Testing and Verification
 
-### Test Avvio Automatico
-1. Vai su **Impostazioni** → **🚀 Avvio Automatico**
-2. Tocca **🧪 Test Avvio**
-3. Verifica che l'app si avvii correttamente
+### Auto Start Test
+1. Go to **Settings** → **🚀 Auto Start**
+2. Tap **🧪 Test Start**
+3. Verify that app starts correctly
 
-### Test Risveglio
-1. Metti la TV in standby
-2. Risveglia la TV
-3. Verifica che LiveTV si avvii automaticamente
+### Wake Up Test
+1. Put TV in standby
+2. Wake up TV
+3. Verify that LiveTV starts automatically
 
-### Verifica Servizi
-1. Vai su **Impostazioni** → **App** → **LiveTV**
-2. Tocca **Memoria e archiviazione**
-3. Verifica che i servizi siano attivi
+### Service Verification
+1. Go to **Settings** → **Apps** → **LiveTV**
+2. Tap **Memory & storage**
+3. Verify that services are active
 
-## 🚨 Risoluzione Problemi
+## 🚨 Troubleshooting
 
-### L'app non si avvia automaticamente
+### App doesn't start automatically
 
-1. **Controlla le impostazioni**:
-   - Verifica che l'avvio automatico sia abilitato
-   - Controlla le ottimizzazioni della batteria
+1. **Check settings**:
+   - Verify that auto start is enabled
+   - Check battery optimizations
 
-2. **Verifica i permessi**:
-   - Controlla i permessi di avvio automatico
-   - Verifica i permessi di esecuzione in background
+2. **Verify permissions**:
+   - Check auto start permissions
+   - Verify background execution permissions
 
-3. **Controlla le impostazioni TV**:
-   - Verifica le impostazioni specifiche del brand
-   - Controlla la modalità sviluppatore
+3. **Check TV settings**:
+   - Verify brand-specific settings
+   - Check developer mode
 
-### L'app si chiude in background
+### App closes in background
 
-1. **Disabilita le ottimizzazioni**:
-   - Vai su **Impostazioni** → **Batteria**
-   - Seleziona **Nessuna limitazione** per LiveTV
+1. **Disable optimizations**:
+   - Go to **Settings** → **Battery**
+   - Select **No restrictions** for LiveTV
 
-2. **Verifica i servizi**:
-   - Controlla che i servizi siano attivi
-   - Verifica le notifiche persistenti
+2. **Verify services**:
+   - Check that services are active
+   - Verify persistent notifications
 
-### Problemi di performance
+### Performance issues
 
-1. **Ottimizza le impostazioni**:
-   - Disabilita funzionalità non necessarie
-   - Riduci la frequenza di aggiornamento EPG
+1. **Optimize settings**:
+   - Disable unnecessary features
+   - Reduce EPG update frequency
 
-2. **Controlla la memoria**:
-   - Verifica l'utilizzo della memoria
-   - Riavvia l'app se necessario
+2. **Check memory**:
+   - Verify memory usage
+   - Restart app if necessary
 
-## 📋 Checklist Configurazione
+## 📋 Configuration Checklist
 
-- [ ] Avvio automatico abilitato nelle impostazioni app
-- [ ] Risveglio automatico abilitato
-- [ ] Servizio di background attivo
-- [ ] Ottimizzazioni batteria disabilitate
-- [ ] Permessi di avvio automatico concessi
-- [ ] Modalità sviluppatore attivata (se richiesto)
-- [ ] Test avvio automatico completato
-- [ ] Test risveglio completato
+- [ ] Auto start enabled in app settings
+- [ ] Wake up auto start enabled
+- [ ] Background service active
+- [ ] Battery optimizations disabled
+- [ ] Auto start permissions granted
+- [ ] Developer mode activated (if required)
+- [ ] Auto start test completed
+- [ ] Wake up test completed
 
-## 🔗 Link Utili
+## 🔗 Useful Links
 
-- [Documentazione Android TV](https://developer.android.com/docs/quality-guidelines/tv-app-quality)
-- [Guida Permessi Android](https://developer.android.com/guide/topics/permissions/overview)
-- [Gestione Servizi Android](https://developer.android.com/guide/components/services)
+- [Android TV Documentation](https://developer.android.com/docs/quality-guidelines/tv-app-quality)
+- [Android Permissions Guide](https://developer.android.com/guide/topics/permissions/overview)
+- [Android Services Management](https://developer.android.com/guide/components/services)
 
-## 📞 Supporto
+## 📞 Support
 
-Se riscontri problemi con l'avvio automatico:
+If you encounter issues with auto start:
 
-1. Controlla i log dell'app
-2. Verifica le impostazioni di sistema
-3. Consulta la documentazione del brand TV
-4. Contatta il supporto tecnico
+1. Check app logs
+2. Verify system settings
+3. Consult TV brand documentation
+4. Contact technical support
 
 ---
 
-**Nota**: Le impostazioni specifiche possono variare in base al modello e alla versione di Android TV. Consulta sempre la documentazione del produttore per configurazioni specifiche.
+**Note**: Specific settings may vary based on Android TV model and version. Always consult manufacturer documentation for specific configurations.
