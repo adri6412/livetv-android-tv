@@ -195,6 +195,28 @@ implementation 'org.jsoup:jsoup:1.16.2'
 ./gradlew installDebug
 ```
 
+### 🚀 Automated Builds (GitHub Actions)
+The project includes automated GitHub Actions workflows for building APK files:
+
+**Available Workflows:**
+- **Build Release APK**: Automatic APK building on version tags
+- **Build Signed Release APK**: Production-ready signed APKs
+- **Run Tests**: Automated testing and lint checks
+
+**Quick Start:**
+```bash
+# Create a version tag to trigger automatic build
+git tag v1.5.32
+git push origin v1.5.32
+```
+
+**Manual Trigger:**
+- Go to GitHub Actions tab
+- Select desired workflow
+- Click "Run workflow"
+
+For detailed setup instructions, see [`.github/README.md`](.github/README.md).
+
 ## Troubleshooting
 
 ### ❌ Common Issues
