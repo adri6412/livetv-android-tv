@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tv_background"
+    tools:context=".ui.main.MainActivity">
+
+    <!-- Header con titolo e pulsanti in layout verticale per telecomando -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/tv_surface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Titolo centrato -->
+        <TextView
+            android:id="@+id/textChannelsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/channels_title"
+            android:textColor="@color/text_primary_dark"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Pulsanti in layout verticale per navigazione telecomando -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/buttonFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⭐ PREFERITI"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusDown="@+id/buttonEpg"
+                style="@style/Button.LiveTV" />
+
+            <Button
+                android:id="@+id/buttonEpg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📺 GUIDA TV"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusDown="@+id/buttonSettings"
+                android:nextFocusUp="@+id/buttonFavorites"
+                style="@style/Button.LiveTV" />
+
+            <Button
+                android:id="@+id/buttonSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚙️ IMPOSTAZIONI"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusDown="@+id/buttonRefresh"
+                android:nextFocusUp="@+id/buttonEpg"
+                style="@style/Button.LiveTV" />
+
+            <Button
+                android:id="@+id/buttonRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🔄 AGGIORNA"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusDown="@+id/recyclerViewChannels"
+                android:nextFocusUp="@+id/buttonSettings"
+                style="@style/Button.LiveTV" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- RecyclerView per i canali -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewChannels"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    
+
+</androidx.constraintlayout.widget.ConstraintLayout>

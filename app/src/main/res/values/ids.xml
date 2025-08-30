@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ID per overlay HbbTV broadcast -->
+    <item name="hbbtv_overlay" type="id" />
+    <!-- ID per WebView HbbTV -->
+    <item name="hbbtv_webview" type="id" />
+</resources>

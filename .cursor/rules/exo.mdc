@@ -1,0 +1,5 @@
+---
+description: do not use exoplayer
+globs:
+alwaysApply: true
+---

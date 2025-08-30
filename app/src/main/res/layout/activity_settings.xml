@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tv_background"
+    android:padding="16dp"
+    tools:context=".ui.settings.SettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header con navigazione ottimizzata per telecomando -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+
+            <!-- Titolo centrato -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_title"
+                android:textSize="28sp"
+                android:textColor="@color/text_primary_dark"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Barra di navigazione principale -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/buttonBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⬅️ Indietro"
+                    android:layout_marginEnd="16dp"
+                    style="@style/Button.LiveTV" />
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💾 Salva"
+                    android:layout_marginStart="16dp"
+                    style="@style/Button.LiveTV" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Sezione Playlist -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Card.LiveTV">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_playlist"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary_dark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- URL Playlist -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_playlist_url"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/editPlaylistUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="http://esempio.com/playlist.m3u"
+                    android:inputType="textUri"
+                    android:textColor="@color/text_primary_dark"
+                    android:textColorHint="@color/text_secondary_dark"
+                    android:background="@drawable/button_selector"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- File locale -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_playlist_file"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/textLocalFile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Nessun file selezionato"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="14sp"
+                        android:background="@drawable/button_selector"
+                        android:padding="12dp"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/buttonSelectFile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Seleziona"
+                        style="@style/Button.LiveTV" />
+
+                </LinearLayout>
+
+                <!-- Test playlist -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <Button
+                        android:id="@+id/buttonTest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🧪 Test Playlist"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Button.LiveTV" />
+
+                    <TextView
+                        android:id="@+id/textChannelCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Canali trovati: 0"
+                        android:textColor="@color/text_secondary_dark"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:background="@drawable/button_selector"
+                        android:padding="12dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Sezione EPG -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Card.LiveTV">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Guida TV (EPG)"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary_dark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_epg_url"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/editEpgUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="http://esempio.com/epg.xml"
+                    android:inputType="textUri"
+                    android:textColor="@color/text_primary_dark"
+                    android:textColorHint="@color/text_secondary_dark"
+                    android:background="@drawable/button_selector"
+                    android:padding="12dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Sezione Logcat Server -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Card.LiveTV">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Server Logcat"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary_dark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- IP Server -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="IP del Server Python:"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/editLogcatServerIp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="192.168.1.100"
+                    android:inputType="text"
+                    android:textColor="@color/text_primary_dark"
+                    android:textColorHint="@color/text_secondary_dark"
+                    android:background="@drawable/button_selector"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Porta Server -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Porta del Server:"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/editLogcatServerPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="8080"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary_dark"
+                    android:textColorHint="@color/text_secondary_dark"
+                    android:background="@drawable/button_selector"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Controlli Logcat -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/buttonStartLogcat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="▶️ Avvia Logcat"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Button.LiveTV" />
+
+                    <Button
+                        android:id="@+id/buttonStopLogcat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="⏹️ Ferma Logcat"
+                        style="@style/Button.LiveTV" />
+
+                </LinearLayout>
+
+                <!-- Status Logcat -->
+                <TextView
+                    android:id="@+id/textLogcatStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Status: Logcat non attivo"
+                    android:textColor="@color/text_secondary_dark"
+                    android:textSize="14sp"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Sezione HbbTV -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Card.LiveTV">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_hbbtv"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary_dark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <Switch
+                        android:id="@+id/switchHbbTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:checked="true" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/settings_hbbtv_enabled"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Sezione Avvio Automatico -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Card.LiveTV">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🚀 Avvio Automatico"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary_dark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Avvio automatico all'accensione -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <Switch
+                        android:id="@+id/switchAutoStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:checked="true" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Avvia automaticamente all'accensione della TV"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <!-- Avvio automatico al risveglio -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <Switch
+                        android:id="@+id/switchAutoStartOnScreenOn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:checked="true" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Avvia automaticamente al risveglio dallo standby"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <!-- Servizio di background -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <Switch
+                        android:id="@+id/switchBackgroundService"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:checked="true" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Mantieni l'app attiva in background"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <!-- App predefinita -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <Switch
+                        android:id="@+id/switchDefaultApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:checked="false" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Imposta come app predefinita per la TV"
+                        android:textColor="@color/text_primary_dark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <!-- Pulsanti per la gestione dell'avvio automatico -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <Button
+                        android:id="@+id/buttonTestAutoStart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🧪 Test Avvio Automatico"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Button.LiveTV" />
+
+                    <Button
+                        android:id="@+id/buttonBatteryOptimization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🔋 Impostazioni Ottimizzazioni Batteria"
+                        style="@style/Button.LiveTV" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Sezione Sistema -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            style="@style/Card.LiveTV">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sistema"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary_dark"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/buttonClearCache"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🗑️ Cancella Cache"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Button.LiveTV" />
+
+                    <Button
+                        android:id="@+id/buttonAbout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ℹ️ Informazioni App"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Button.LiveTV" />
+
+                </LinearLayout>
+                
+                <Button
+                    android:id="@+id/buttonLogcatServer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🐛 Avvia Server Logcat (Porta 8080)"
+                    android:layout_marginTop="16dp"
+                    style="@style/Button.LiveTV" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+        <!-- Progress bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</ScrollView>

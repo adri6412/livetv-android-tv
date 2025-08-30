@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LiveTV</string>
+    <string name="app_description">Decoder digitale terrestre per Android TV</string>
+    
+    <!-- Menu principale -->
+    <string name="menu_channels">Canali</string>
+    <string name="menu_epg">Guida TV</string>
+    <string name="menu_settings">Impostazioni</string>
+    <string name="menu_favorites">Preferiti</string>
+    
+    <!-- Player -->
+    <string name="player_loading">Caricamento in corso...</string>
+    <string name="player_error">Errore durante la riproduzione</string>
+    <string name="player_no_signal">Nessun segnale</string>
+    <string name="player_buffering">Buffering...</string>
+    
+    <!-- Canali -->
+    <string name="channels_title">Lista Canali</string>
+    <string name="channels_empty">Nessun canale disponibile</string>
+    <string name="channels_loading">Caricamento canali...</string>
+    <string name="channel_info">Info canale</string>
+    <string name="channel_add_favorite">Aggiungi ai preferiti</string>
+    <string name="channel_remove_favorite">Rimuovi dai preferiti</string>
+    
+    <!-- EPG -->
+    <string name="epg_title">Guida TV</string>
+    <string name="epg_now">Ora in onda</string>
+    <string name="epg_next">Prossimo</string>
+    <string name="epg_no_data">Nessun dato EPG disponibile</string>
+    <string name="epg_loading">Caricamento guida TV...</string>
+    <string name="epg_program_info">Info programma</string>
+    
+    <!-- Impostazioni -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_playlist">Playlist</string>
+    <string name="settings_playlist_url">URL Playlist M3U</string>
+    <string name="settings_playlist_file">File Playlist locale</string>
+    <string name="settings_epg_url">URL EPG (XMLTV)</string>
+    <string name="settings_video">Video</string>
+    <string name="settings_audio">Audio</string>
+    <string name="settings_hbbtv">HbbTV</string>
+    <string name="settings_hbbtv_enabled">Abilita HbbTV</string>
+    <string name="settings_about">Informazioni</string>
+    
+    <!-- Logcat -->
+    <string name="settings_logcat_title">Server Logcat</string>
+    <string name="settings_logcat_server_ip">IP del Server</string>
+    <string name="settings_logcat_server_port">Porta del Server</string>
+    <string name="settings_logcat_start">Avvia Logcat</string>
+    <string name="settings_logcat_stop">Ferma Logcat</string>
+    
+    <!-- HbbTV -->
+    <string name="hbbtv_title">Servizi Interattivi</string>
+    <string name="hbbtv_loading">Caricamento servizio...</string>
+    <string name="hbbtv_error">Errore nel caricamento del servizio</string>
+    <string name="hbbtv_not_available">Servizio non disponibile</string>
+    
+    <!-- Errori -->
+    <string name="error_network">Errore di connessione</string>
+    <string name="error_playlist_invalid">Playlist non valida</string>
+    <string name="error_stream_unavailable">Stream non disponibile</string>
+    <string name="error_generic">Si è verificato un errore</string>
+    
+    <!-- Azioni -->
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="action_retry">Riprova</string>
+    <string name="action_back">Indietro</string>
+    <string name="action_exit">Esci</string>
+    <string name="action_refresh">Aggiorna</string>
+    
+    <!-- Controlli player -->
+    <string name="control_play">Riproduci</string>
+    <string name="control_pause">Pausa</string>
+    <string name="control_stop">Stop</string>
+    <string name="control_previous">Canale precedente</string>
+    <string name="control_next">Canale successivo</string>
+    <string name="control_volume_up">Volume +</string>
+    <string name="control_volume_down">Volume -</string>
+    <string name="control_mute">Muto</string>
+    <string name="control_info">Info</string>
+    <string name="control_menu">Menu</string>
+    
+    <!-- Informazioni canale -->
+    <string name="channel_number">Numero: %d</string>
+    <string name="channel_name">Nome: %s</string>
+    <string name="channel_group">Gruppo: %s</string>
+    <string name="channel_quality">Qualità: %s</string>
+    
+    <!-- Formato tempo -->
+    <string name="time_format_hours_minutes">%02d:%02d</string>
+    <string name="time_format_full">%02d:%02d:%02d</string>
+    
+</resources>

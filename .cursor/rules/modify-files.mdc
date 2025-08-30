@@ -1,0 +1,5 @@
+---
+description: always create and modify files directly instead of showing them to me
+globs:
+alwaysApply: true
+---

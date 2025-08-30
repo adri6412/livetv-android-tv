@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/player_background"
+    tools:context=".ui.hbbtv.HbbTVActivity">
+
+    <!-- WebView per HbbTV -->
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- Messaggio di errore -->
+    <TextView
+        android:id="@+id/textError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/hbbtv_error"
+        android:textColor="@color/status_offline"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:background="@color/player_controls_background"
+        android:padding="16dp"
+        android:visibility="gone"
+        style="@style/PlayerText" />
+
+    <!-- Controlli overlay -->
+    <LinearLayout
+        android:id="@+id/layoutControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="horizontal"
+        android:background="@color/player_controls_background"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textChannelName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/hbbtv_title"
+            android:textColor="@color/player_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            style="@style/PlayerText" />
+
+        <Button
+            android:id="@+id/buttonRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_refresh"
+            android:layout_marginEnd="8dp"
+            style="@style/Button.LiveTV" />
+
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_back"
+            style="@style/Button.LiveTV" />
+
+    </LinearLayout>
+
+    <!-- Istruzioni tasti colorati -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="@color/player_controls_background"
+        android:padding="8dp"
+        android:gravity="center"
+        android:alpha="0.8">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔴 ROSSO • 🟢 VERDE • 🟡 GIALLO • 🔵 BLU • MENU Controlli • BACK Indietro"
+            android:textColor="@color/text_secondary_dark"
+            android:textSize="12sp"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+</FrameLayout>

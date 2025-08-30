@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tv-app-defaults xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Configurazione per app predefinita per Android TV -->
+    <default>
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent-filter>
+    </default>
+    
+    <!-- Configurazione per la gestione dei canali TV -->
+    <channel>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="tv" />
+        </intent-filter>
+    </channel>
+    
+    <!-- Configurazione per la gestione dei programmi TV -->
+    <program>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="tv" />
+            <data android:mimeType="video/*" />
+        </intent-filter>
+    </program>
+    
+    <!-- Configurazione per la gestione delle playlist M3U -->
+    <playlist>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="file" />
+            <data android:mimeType="application/x-mpegurl" />
+            <data android:mimeType="application/vnd.apple.mpegurl" />
+        </intent-filter>
+    </playlist>
+    
+    <!-- Configurazione per la gestione dei file XMLTV -->
+    <xmltv>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="file" />
+            <data android:mimeType="application/xml" />
+            <data android:mimeType="text/xml" />
+        </intent-filter>
+    </xmltv>
+    
+    <!-- Configurazione per app predefinita per la TV -->
+    <tv-app-default>
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            <category android:name="android.intent.category.HOME" />
+        </intent-filter>
+    </tv-app-default>
+</tv-app-defaults>

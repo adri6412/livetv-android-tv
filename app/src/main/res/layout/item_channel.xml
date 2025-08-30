@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@drawable/channel_selector"
+    android:nextFocusUp="@id/recyclerViewChannels"
+    android:nextFocusDown="@id/recyclerViewChannels"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Logo del canale -->
+        <ImageView
+            android:id="@+id/imageChannelLogo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="centerCrop"
+            android:background="@color/tv_surface"
+            android:focusable="false"
+            tools:src="@drawable/ic_launcher" />
+
+        <!-- Informazioni canale -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:focusable="false">
+
+            <!-- Nome e numero canale -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:focusable="false">
+
+                <TextView
+                    android:id="@+id/textChannelNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="001"
+                    android:textColor="@color/tv_accent"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:minWidth="40dp"
+                    android:gravity="center"
+                    android:focusable="false" />
+
+                <TextView
+                    android:id="@+id/textChannelName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Nome Canale"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:focusable="false" />
+
+                <!-- Icona preferito -->
+                <ImageView
+                    android:id="@+id/imageFavorite"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_favorite"
+                    android:visibility="gone"
+                    android:tint="@color/tv_accent"
+                    android:focusable="false" />
+
+                <!-- Icona HD -->
+                <TextView
+                    android:id="@+id/textHD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="HD"
+                    android:textColor="@color/status_online"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/badge_hd"
+                    android:padding="4dp"
+                    android:visibility="gone"
+                    android:focusable="false" />
+
+                <!-- Icona HbbTV -->
+                <ImageView
+                    android:id="@+id/imageHbbTV"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_hbbtv"
+                    android:visibility="gone"
+                    android:tint="@color/tv_primary"
+                    android:focusable="false" />
+
+            </LinearLayout>
+
+            <!-- Gruppo e qualità -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:focusable="false">
+
+                <TextView
+                    android:id="@+id/textChannelGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Gruppo"
+                    android:textColor="@color/text_secondary_dark"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:focusable="false" />
+
+                <TextView
+                    android:id="@+id/textChannelQuality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="SD"
+                    android:textColor="@color/text_secondary_dark"
+                    android:textSize="12sp"
+                    android:focusable="false" />
+
+            </LinearLayout>
+
+            <!-- Programma corrente (se disponibile) -->
+            <TextView
+                android:id="@+id/textCurrentProgram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Programma corrente"
+                android:textColor="@color/epg_current_program"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:visibility="gone"
+                android:focusable="false" />
+
+        </LinearLayout>
+
+        <!-- Indicatore di stato -->
+        <View
+            android:id="@+id/viewStatusIndicator"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:background="@color/status_online"
+            android:focusable="false" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

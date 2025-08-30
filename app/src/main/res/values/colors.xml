@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colori principali -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent">#FF5722</color>
+    
+    <!-- Colori di sfondo -->
+    <color name="background_dark">#121212</color>
+    <color name="background_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="surface_light">#F5F5F5</color>
+    
+    <!-- Colori del testo -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_primary_light">#212121</color>
+    <color name="text_secondary_dark">#B3FFFFFF</color>
+    <color name="text_secondary_light">#757575</color>
+    
+    <!-- Colori per Android TV -->
+    <color name="tv_background">#0F0F0F</color>
+    <color name="tv_surface">#1A1A1A</color>
+    <color name="tv_surface_variant">#2A2A2A</color>
+    <color name="tv_primary">#2196F3</color>
+    <color name="tv_accent">#FF9800</color>
+    
+    <!-- Colori per il player -->
+    <color name="player_background">#000000</color>
+    <color name="player_controls_background">#80000000</color>
+    <color name="player_text">#FFFFFF</color>
+    
+    <!-- Colori per EPG -->
+    <color name="epg_background">#1A1A1A</color>
+    <color name="epg_current_program">#4CAF50</color>
+    <color name="epg_next_program">#FFC107</color>
+    <color name="epg_past_program">#757575</color>
+    <color name="program_current">#4CAF50</color>
+    <color name="program_normal">#424242</color>
+    
+    <!-- Colori per i canali -->
+    <color name="channel_selected">#2196F3</color>
+    <color name="channel_focused">#1976D2</color>
+    <color name="channel_normal">#424242</color>
+    
+    <!-- Colori di stato -->
+    <color name="status_online">#4CAF50</color>
+    <color name="status_offline">#F44336</color>
+    <color name="status_loading">#FF9800</color>
+    <color name="error_color">#F44336</color>
+    
+    <!-- Colori trasparenti -->
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent_black">#80000000</color>
+    <color name="semi_transparent_white">#80FFFFFF</color>
+    
+</resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<auto-start-rules>
+    <!-- Regole per l'avvio automatico -->
+    <rule>
+        <trigger>
+            <action>android.intent.action.BOOT_COMPLETED</action>
+            <category>android.intent.category.DEFAULT</category>
+        </trigger>
+        <action>
+            <start-service>com.livetv.androidtv.service.AutoStartService</start-service>
+            <start-activity>com.livetv.androidtv.ui.main.MainActivity</start-activity>
+        </action>
+        <condition>
+            <preference>auto_start_enabled</preference>
+            <value>true</value>
+        </condition>
+    </rule>
+    
+    <rule>
+        <trigger>
+            <action>android.intent.action.SCREEN_ON</action>
+            <category>android.intent.category.DEFAULT</category>
+        </trigger>
+        <action>
+            <start-service>com.livetv.androidtv.service.BackgroundService</start-service>
+            <start-activity>com.livetv.androidtv.ui.main.MainActivity</start-activity>
+        </action>
+        <condition>
+            <preference>auto_start_on_screen_on</preference>
+            <value>true</value>
+        </condition>
+    </rule>
+    
+    <rule>
+        <trigger>
+            <action>android.intent.action.USER_PRESENT</action>
+            <category>android.intent.category.DEFAULT</category>
+        </trigger>
+        <action>
+            <start-service>com.livetv.androidtv.service.BackgroundService</start-service>
+        </action>
+        <condition>
+            <preference>background_service_enabled</preference>
+            <value>true</value>
+        </condition>
+    </rule>
+    
+    <rule>
+        <trigger>
+            <action>android.intent.action.POWER_CONNECTED</action>
+            <category>android.intent.category.DEFAULT</category>
+        </trigger>
+        <action>
+            <start-service>com.livetv.androidtv.service.BackgroundService</start-service>
+        </action>
+        <condition>
+            <preference>background_service_enabled</preference>
+            <value>true</value>
+        </condition>
+    </rule>
+</auto-start-rules>

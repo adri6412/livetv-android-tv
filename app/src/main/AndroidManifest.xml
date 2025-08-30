@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permessi necessari -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    
+    <!-- Permessi per l'avvio automatico -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    
+    <!-- Permessi per l'integrazione TV -->
+    <uses-permission android:name="android.permission.BIND_TV_INPUT" />
+    <uses-permission android:name="android.permission.READ_TV_LISTINGS" />
+    <uses-permission android:name="android.permission.WRITE_TV_LISTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_TV_INPUT" />
+
+    <!-- Dichiarazione per Android TV -->
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <!-- Supporto per telecomando -->
+    <uses-feature
+        android:name="android.hardware.gamepad"
+        android:required="false" />
+
+    <application
+        android:name=".LiveTVApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LiveTV"
+        android:banner="@drawable/app_banner"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:persistent="true"
+        android:hardwareAccelerated="true"
+        android:allowClearUserData="false"
+        android:allowTaskReparenting="false"
+        android:clearTaskOnLaunch="false"
+        android:excludeFromRecents="false"
+        android:finishOnTaskLaunch="false"
+        android:launchMode="singleTask"
+        android:taskAffinity=""
+        tools:targetApi="31">
+
+        <!-- Activity principale per Android TV -->
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LiveTV.Leanback"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTask"
+            android:clearTaskOnLaunch="false"
+            android:alwaysRetainTaskState="true"
+            android:finishOnTaskLaunch="false"
+            android:excludeFromRecents="false"
+            android:taskAffinity=""
+            android:noHistory="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="livetv" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activity per la riproduzione video -->
+        <activity
+            android:name=".ui.player.PlayerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LiveTV.Player"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- Activity per le impostazioni -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LiveTV.Settings"
+            android:screenOrientation="landscape" />
+
+        <!-- Activity per le impostazioni avanzate -->
+        <activity
+            android:name=".ui.settings.AdvancedSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LiveTV.Settings"
+            android:screenOrientation="landscape" />
+
+        <!-- Activity per HbbTV -->
+        <activity
+            android:name=".ui.hbbtv.HbbTVActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LiveTV.HbbTV"
+            android:screenOrientation="landscape"
+            android:hardwareAccelerated="true" />
+
+        <!-- Activity per EPG -->
+        <activity
+            android:name=".ui.epg.EPGActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LiveTV.EPG"
+            android:screenOrientation="landscape" />
+
+        <!-- Servizio per il download EPG -->
+        <service
+            android:name=".service.EPGService"
+            android:exported="false" />
+            
+        <service
+            android:name=".service.LogcatService"
+            android:exported="false" />
+            
+        <!-- Servizio per l'avvio automatico -->
+        <service
+            android:name=".service.AutoStartService"
+            android:exported="false"
+            android:enabled="true" />
+            
+        <!-- Servizio di background -->
+        <service
+            android:name=".service.BackgroundService"
+            android:exported="false"
+            android:enabled="true" />
+            
+        <!-- Servizio TV Input per integrazione con sistema TV -->
+        <service
+            android:name=".service.LiveTVInputService"
+            android:exported="true"
+            android:enabled="true"
+            android:permission="android.permission.BIND_TV_INPUT">
+            <intent-filter>
+                <action android:name="android.media.tv.TvInputService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.media.tv.input"
+                android:resource="@xml/tv_input" />
+        </service>
+            
+        <!-- Receiver per l'avvio automatico -->
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:exported="true"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.POWER_CONNECTED" />
+                <action android:name="android.intent.action.POWER_DISCONNECTED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

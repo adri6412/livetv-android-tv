@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="@color/tv_primary"
+        android:pathData="M0,0h320v180h-320z" />
+    <path
+        android:fillColor="@color/text_primary_dark"
+        android:pathData="M50,50h220v80h-220z"
+        android:fillAlpha="0.1" />
+    <path
+        android:fillColor="@color/text_primary_dark"
+        android:pathData="M160,60c27.61,0 50,22.39 50,50s-22.39,50 -50,50 -50,-22.39 -50,-50 22.39,-50 50,-50zM160,80c-16.57,0 -30,13.43 -30,30s13.43,30 30,30 30,-13.43 30,-30 -13.43,-30 -30,-30z" />
+</vector>

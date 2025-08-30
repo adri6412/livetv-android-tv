@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/tv_surface"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:nextFocusUp="@id/recyclerViewEpg"
+    android:nextFocusDown="@id/recyclerViewEpg">
+
+    <!-- Header con titolo e indicatore programma corrente -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Titolo Programma"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary_dark"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/textCurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ORA"
+            android:textSize="12sp"
+            android:textColor="@color/text_primary_light"
+            android:background="@color/program_current"
+            android:padding="4dp"
+            android:visibility="gone"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Descrizione -->
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descrizione del programma"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary_dark"
+        android:layout_marginBottom="8dp"
+        android:maxLines="3"
+        android:ellipsize="end" />
+
+    <!-- Footer con orario, durata e categoria -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="20:00 - 21:00"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60m"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary_dark"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/textCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intrattenimento"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary_dark"
+            android:background="@color/tv_surface_variant"
+            android:padding="4dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
