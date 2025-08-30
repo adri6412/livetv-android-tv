@@ -230,12 +230,7 @@ adb logcat | grep "LiveTV"
 ### 🚧 Funzionalità Future
 - [ ] **HbbTV completo**: Implementazione completa servizi interattivi
 
-### 🔄 Miglioramenti Pianificati
-- [ ] **Performance**: Ottimizzazione memoria
-- [ ] **Stabilità**: Gestione errori avanzata
-- [ ] **UX**: Animazioni e transizioni
-- [ ] **Accessibilità**: Supporto TalkBack
-- [ ] **Localizzazione**: Supporto multi-lingua
+
 
 ## Licenza
 
