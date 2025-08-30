@@ -229,14 +229,6 @@ adb logcat | grep "LiveTV"
 
 ### 🚧 Funzionalità Future
 - [ ] **HbbTV completo**: Implementazione completa servizi interattivi
-- [ ] **Registrazione programmi**: PVR integrato
-- [ ] **Timeshift**: Pausa/riavvolgimento live TV
-- [ ] **Multi-audio**: Selezione tracce audio
-- [ ] **Sottotitoli**: Supporto DVB subtitles
-- [ ] **Parental control**: Controllo genitori
-- [ ] **Skin personalizzabili**: Temi interfaccia
-- [ ] **Cast support**: Chromecast integration
-- [ ] **Voice control**: Controllo vocale Android TV
 
 ### 🔄 Miglioramenti Pianificati
 - [ ] **Performance**: Ottimizzazione memoria
