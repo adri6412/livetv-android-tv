@@ -37,13 +37,13 @@ jobs:
       run: chmod +x ./gradlew
       
     - name: Create keystore (if not exists)
-      if: ${{ secrets.KEYSTORE_BASE64 == '' }}
+      if: ${{ !secrets.KEYSTORE_BASE64 }}
       run: |
         echo "⚠️ No keystore found in secrets. Building unsigned APK."
         echo "To build signed APK, add KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, and KEY_PASSWORD to repository secrets."
         
     - name: Setup keystore (if exists)
-      if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+      if: ${{ secrets.KEYSTORE_BASE64 }}
       run: |
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
         echo "keystore.jks" >> $GITHUB_PATH
@@ -52,11 +52,11 @@ jobs:
       run: ./gradlew assembleDebug
       
     - name: Build Release APK (Unsigned)
-      if: ${{ secrets.KEYSTORE_BASE64 == '' }}
+      if: ${{ !secrets.KEYSTORE_BASE64 }}
       run: ./gradlew assembleRelease
       
     - name: Build Release APK (Signed)
-      if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+      if: ${{ secrets.KEYSTORE_BASE64 }}
       run: |
         ./gradlew assembleRelease \
           -Pandroid.injected.signing.store.file=keystore.jks \
