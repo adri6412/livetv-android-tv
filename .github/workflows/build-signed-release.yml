@@ -36,14 +36,23 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
       
+    - name: Check keystore availability
+      id: keystore-check
+      run: |
+        if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+          echo "keystore-available=true" >> $GITHUB_OUTPUT
+        else
+          echo "keystore-available=false" >> $GITHUB_OUTPUT
+        fi
+        
     - name: Create keystore (if not exists)
-      if: ${{ !secrets.KEYSTORE_BASE64 }}
+      if: steps.keystore-check.outputs.keystore-available == 'false'
       run: |
         echo "⚠️ No keystore found in secrets. Building unsigned APK."
         echo "To build signed APK, add KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, and KEY_PASSWORD to repository secrets."
         
     - name: Setup keystore (if exists)
-      if: ${{ secrets.KEYSTORE_BASE64 }}
+      if: steps.keystore-check.outputs.keystore-available == 'true'
       run: |
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
         echo "keystore.jks" >> $GITHUB_PATH
@@ -52,11 +61,11 @@ jobs:
       run: ./gradlew assembleDebug
       
     - name: Build Release APK (Unsigned)
-      if: ${{ !secrets.KEYSTORE_BASE64 }}
+      if: steps.keystore-check.outputs.keystore-available == 'false'
       run: ./gradlew assembleRelease
       
     - name: Build Release APK (Signed)
-      if: ${{ secrets.KEYSTORE_BASE64 }}
+      if: steps.keystore-check.outputs.keystore-available == 'true'
       run: |
         ./gradlew assembleRelease \
           -Pandroid.injected.signing.store.file=keystore.jks \
@@ -96,7 +105,7 @@ jobs:
         echo "## 🎯 Signed Build Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "✅ **Debug APK**: Built successfully" >> $GITHUB_STEP_SUMMARY
-        if [[ "${{ secrets.KEYSTORE_BASE64 }}" != "" ]]; then
+        if [[ "${{ steps.keystore-check.outputs.keystore-available }}" == "true" ]]; then
           echo "✅ **Release APK**: Built and signed successfully" >> $GITHUB_STEP_SUMMARY
           echo "🔐 **Signing**: APK is digitally signed" >> $GITHUB_STEP_SUMMARY
         else
