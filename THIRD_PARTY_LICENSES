@@ -1,0 +1,233 @@
+THIRD PARTY LICENSES
+====================
+
+This file contains the license information for all third-party libraries used in LiveTV Android TV application.
+
+LIVE TV ANDROID TV - DEPENDENCY LICENSES
+========================================
+
+1. ANDROID SDK & ANDROIDX LIBRARIES
+-----------------------------------
+
+Android SDK
+License: Proprietary (Google)
+Copyright: Google LLC
+Note: Proprietary license, compatible with MPL 2.0 linking
+
+AndroidX Core KTX (1.12.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX AppCompat (1.6.1)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+Google Material Design (1.10.0)
+License: Apache License 2.0
+Copyright: Google LLC
+URL: https://material.io/
+
+AndroidX ConstraintLayout (2.1.4)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Leanback (1.0.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX TVProvider (1.0.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Preference KTX (1.2.1)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX WebKit (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+2. MEDIA3/EXOPLAYER SUITE
+-------------------------
+
+AndroidX Media3 ExoPlayer (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Media3 ExoPlayer HLS (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Media3 UI (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Media3 UI Leanback (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Media3 Common (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Media3 Extractor (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Media3 DataSource OkHttp (1.8.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+Jellyfin Media3 FFmpeg Decoder (1.8.0+1)
+License: GNU Lesser General Public License v2.1 or later (LGPL-2.1+)
+Copyright: Jellyfin Contributors
+URL: https://github.com/jellyfin/media3-ffmpeg-decoder
+Note: LGPL 2.1+ compatible with MPL 2.0 via linking
+
+3. NETWORKING LIBRARIES
+-----------------------
+
+Retrofit2 (2.9.0)
+License: Apache License 2.0
+Copyright: Square, Inc.
+URL: https://square.github.io/retrofit/
+
+Retrofit2 Converter Gson (2.9.0)
+License: Apache License 2.0
+Copyright: Square, Inc.
+URL: https://square.github.io/retrofit/
+
+OkHttp3 (4.12.0)
+License: Apache License 2.0
+Copyright: Square, Inc.
+URL: https://square.github.io/okhttp/
+
+OkHttp3 Logging Interceptor (4.12.0)
+License: Apache License 2.0
+Copyright: Square, Inc.
+URL: https://square.github.io/okhttp/
+
+4. DATABASE & ARCHITECTURE
+--------------------------
+
+AndroidX Room Runtime (2.6.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Room KTX (2.6.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Room Compiler (2.6.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Lifecycle ViewModel KTX (2.7.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Lifecycle LiveData KTX (2.7.0)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+Kotlin Coroutines Android (1.7.3)
+License: Apache License 2.0
+Copyright: JetBrains s.r.o.
+URL: https://github.com/Kotlin/kotlinx.coroutines
+
+5. UTILITY LIBRARIES
+--------------------
+
+Gson (2.10.1)
+License: Apache License 2.0
+Copyright: Google LLC
+URL: https://github.com/google/gson
+
+Glide (4.16.0)
+License: BSD License
+Copyright: Bump Technologies, Inc.
+URL: https://github.com/bumptech/glide
+
+JSoup (1.16.2)
+License: MIT License
+Copyright: Jonathan Hedley
+URL: https://jsoup.org/
+
+6. TESTING LIBRARIES
+--------------------
+
+JUnit (4.13.2)
+License: Eclipse Public License 1.0
+Copyright: JUnit Team
+URL: https://junit.org/junit4/
+
+Mockito Core (5.3.1)
+License: MIT License
+Copyright: Mockito contributors
+URL: https://site.mockito.org/
+
+Mockito Inline (5.2.0)
+License: MIT License
+Copyright: Mockito contributors
+URL: https://site.mockito.org/
+
+AndroidX Test Ext JUnit (1.1.5)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+AndroidX Test Espresso Core (3.5.1)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/jetpack/androidx
+
+7. BUILD TOOLS
+--------------
+
+Android Gradle Plugin (8.1.2)
+License: Apache License 2.0
+Copyright: The Android Open Source Project
+URL: https://developer.android.com/studio
+
+Kotlin Android Plugin (1.9.10)
+License: Apache License 2.0
+Copyright: JetBrains s.r.o.
+URL: https://kotlinlang.org/
+
+LICENSE COMPATIBILITY SUMMARY
+=============================
+
+All third-party libraries used in this project are compatible with Mozilla Public License 2.0 (MPL 2.0):
+
+✅ Apache License 2.0 libraries: Fully compatible
+✅ MIT License libraries: Compatible (more permissive)
+✅ BSD License libraries: Compatible (more permissive)
+✅ LGPL 2.1+ libraries: Compatible via linking
+✅ Proprietary libraries: Compatible via linking
+
+No license conflicts detected. All dependencies can be legally used with MPL 2.0 licensed software.
+
+For complete license texts, please refer to the individual library documentation or source repositories listed above.
+
+---
+Generated for LiveTV Android TV v1.5.31
+Last updated: August 30, 2025

@@ -240,6 +240,19 @@ This project is released under Mozilla Public License 2.0 (MPL 2.0). See `LICENS
 - ✅ **Linking freedom** - Can be linked with proprietary software
 - ✅ **Contributions protected** - Modifications to LiveTV files must be shared
 
+### Third-Party Dependencies
+This project uses third-party libraries with compatible licenses. See `THIRD_PARTY_LICENSES` file for complete license information of all dependencies.
+
+**License Summary:**
+- **AndroidX/Media3**: Apache 2.0 (compatible)
+- **Retrofit/OkHttp**: Apache 2.0 (compatible)
+- **Jellyfin FFmpeg**: LGPL 2.1+ (compatible via linking)
+- **Glide**: BSD License (compatible)
+- **JSoup**: MIT License (compatible)
+- **Testing libraries**: Apache 2.0/MIT (compatible)
+
+All dependencies are legally compatible with MPL 2.0.
+
 ## Contributing
 
 Contributions are welcome! To contribute:
