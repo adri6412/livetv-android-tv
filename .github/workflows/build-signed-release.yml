@@ -73,6 +73,13 @@ jobs:
           -Pandroid.injected.signing.key.alias="${{ secrets.KEY_ALIAS }}" \
           -Pandroid.injected.signing.key.password="${{ secrets.KEY_PASSWORD }}"
           
+    - name: List APK files
+      run: |
+        echo "=== Debug APK files ==="
+        ls -la app/build/outputs/apk/debug/ || echo "Debug APK directory not found"
+        echo "=== Release APK files ==="
+        ls -la app/build/outputs/apk/release/ || echo "Release APK directory not found"
+          
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
@@ -84,7 +91,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: livetv-release-apk
-        path: app/build/outputs/apk/release/app-release.apk
+        path: app/build/outputs/apk/release/
         retention-days: 30
         
     - name: Create Release (on tag)
