@@ -49,9 +49,9 @@ Le impostazioni di LiveTV sono state ottimizzate per una navigazione intuitiva c
 📺 Guida TV (EPG)
 ```
 
-### 4. Sezione HbbTV
+### 4. Sezione HbbTV (DISATTIVATO)
 ```
-📡 HbbTV Abilitato
+📡 HbbTV Abilitato (non funzionale)
 ```
 
 ### 5. Sezione Avvio Automatico 🚀

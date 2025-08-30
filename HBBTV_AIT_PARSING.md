@@ -1,6 +1,8 @@
-# HbbTV AIT Parsing System
+# HbbTV AIT Parsing System - DISATTIVATO
 
-This document describes the robust HbbTV AIT (Application Information Table) parsing system implemented for the LiveTV Android TV app.
+⚠️ **NOTA IMPORTANTE**: Il supporto HbbTV non è completamente implementato ed è attualmente disattivato nella versione corrente dell'app.
+
+This document describes the planned robust HbbTV AIT (Application Information Table) parsing system for the LiveTV Android TV app. **This functionality is currently disabled and not fully implemented.**
 
 ## Overview
 

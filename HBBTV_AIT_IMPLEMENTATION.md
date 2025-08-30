@@ -1,6 +1,8 @@
-# HbbTV AIT Parsing Implementation
+# HbbTV AIT Parsing Implementation - DISATTIVATO
 
-This document describes the implementation of real AIT (Application Information Table) parsing for the LiveTV Android TV app, replacing the previous regex-based approach with proper MPEG-TS PSI/SI parsing.
+⚠️ **NOTA IMPORTANTE**: Il supporto HbbTV non è completamente implementato ed è attualmente disattivato nella versione corrente dell'app.
+
+This document describes the planned implementation of real AIT (Application Information Table) parsing for the LiveTV Android TV app. **This functionality is currently disabled and not fully implemented.**
 
 ## Overview
 
