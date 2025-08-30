@@ -54,8 +54,8 @@ jobs:
     - name: Setup keystore (if exists)
       if: steps.keystore-check.outputs.keystore-available == 'true'
       run: |
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/keystore.jks
-        echo "Keystore created at app/keystore.jks"
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+        echo "Keystore created at keystore.jks"
         
     - name: Build Debug APK
       run: ./gradlew assembleDebug
@@ -68,7 +68,7 @@ jobs:
       if: steps.keystore-check.outputs.keystore-available == 'true'
       run: |
         ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=app/keystore.jks \
+          -Pandroid.injected.signing.store.file=keystore.jks \
           -Pandroid.injected.signing.store.password="${{ secrets.KEYSTORE_PASSWORD }}" \
           -Pandroid.injected.signing.key.alias="${{ secrets.KEY_ALIAS }}" \
           -Pandroid.injected.signing.key.password="${{ secrets.KEY_PASSWORD }}"
