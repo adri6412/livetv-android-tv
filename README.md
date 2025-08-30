@@ -25,12 +25,11 @@ Un'applicazione Android TV che simula un decoder digitale terrestre, in grado di
 - **Ricerca programmi**: Filtro per titolo e categoria
 - **Cache locale**: Memorizzazione offline dei dati EPG
 
-### 🌐 HbbTV (Hybrid Broadcast Broadband TV)
-- **Servizi interattivi**: Supporto applicazioni HbbTV
-- **WebView integrata**: Rendering servizi web dei broadcaster
-- **Tasti colorati**: Supporto tasti rosso/verde/giallo/blu
-- **API simulation**: Emulazione API HbbTV standard
-- **Navigazione ibrida**: Integrazione broadcast/broadband
+### ⚠️ HbbTV (Hybrid Broadcast Broadband TV) - DISATTIVATO
+- **Nota importante**: Il supporto HbbTV non è completamente implementato ed è attualmente disattivato
+- **Stato**: Funzionalità in sviluppo, non utilizzabile nella versione corrente
+- **Tasti colorati**: I tasti rosso/verde/giallo/blu sono presenti ma non funzionali
+- **Pianificato**: Implementazione completa in future versioni
 
 ### ⚙️ Gestione Configurazione
 - **Playlist multiple**: Gestione di più sorgenti
@@ -61,7 +60,7 @@ app/
 │   ├── player/         # Player video
 │   ├── settings/       # Configurazioni
 │   ├── epg/           # Guida TV
-│   └── hbbtv/         # Servizi HbbTV
+│   └── hbbtv/         # Servizi HbbTV (disattivato)
 ├── utils/
 │   ├── M3UParser       # Parser playlist M3U
 │   └── XMLTVParser     # Parser EPG XMLTV
@@ -109,7 +108,7 @@ http://[server]:9981/stream/channel/[uuid]
 - **MENU**: Apri impostazioni
 - **GUIDE**: Apri guida TV (EPG)
 - **⭐**: Filtra canali preferiti
-- **🔴🟢🟡🔵**: Tasti colorati HbbTV
+- **🔴🟢🟡🔵**: Tasti colorati (HbbTV disattivato)
 - **INFO**: Mostra informazioni canale
 - **BACK**: Torna indietro
 
@@ -118,7 +117,7 @@ http://[server]:9981/stream/channel/[uuid]
 2. **Premi ENTER** per avviare riproduzione
 3. **Usa CH+/CH-** per cambiare canale
 4. **Premi ENTER** durante riproduzione per controlli
-5. **Tasto rosso** per servizi HbbTV (se disponibili)
+5. **Tasti colorati** non funzionali (HbbTV disattivato)
 
 ### 📋 Gestione Preferiti
 1. **Seleziona canale** nella lista
@@ -134,7 +133,7 @@ http://[server]:9981/stream/channel/[uuid]
 #EXTINF:-1 tvg-id="rai1" tvg-name="Rai 1" tvg-logo="logo.png" group-title="Rai",Rai 1 HD
 http://server:9981/stream/channel/uuid1
 
-#EXTINF:-1 tvg-id="canale5" tvg-name="Canale 5" hbbtv-url="http://hbbtv.mediaset.it",Canale 5 HD
+#EXTINF:-1 tvg-id="canale5" tvg-name="Canale 5",Canale 5 HD
 http://server:9981/stream/channel/uuid2
 ```
 
@@ -216,9 +215,9 @@ implementation 'org.jsoup:jsoup:1.16.2'
 - Riavvia servizio EPG
 
 **HbbTV non funziona**
-- Verifica URL HbbTV nel M3U
-- Abilita JavaScript in impostazioni
-- Controlla compatibilità servizio
+- **Nota**: HbbTV è disattivato nella versione corrente
+- La funzionalità è in sviluppo per future versioni
+- I tasti colorati non sono funzionali
 
 ### 📊 Log e Debug
 I log dell'applicazione sono disponibili tramite:
@@ -229,6 +228,7 @@ adb logcat | grep "LiveTV"
 ## Roadmap
 
 ### 🚧 Funzionalità Future
+- [ ] **HbbTV completo**: Implementazione completa servizi interattivi
 - [ ] **Registrazione programmi**: PVR integrato
 - [ ] **Timeshift**: Pausa/riavvolgimento live TV
 - [ ] **Multi-audio**: Selezione tracce audio
