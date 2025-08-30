@@ -250,12 +250,7 @@ I contributi sono benvenuti! Per contribuire:
 4. Push al branch
 5. Apri Pull Request
 
-## Supporto
 
-Per supporto e segnalazione bug:
-- 🐛 **Issues**: GitHub Issues
-- 📧 **Email**: support@livetv-app.com
-- 💬 **Forum**: Community Forum
 
 ---
 
