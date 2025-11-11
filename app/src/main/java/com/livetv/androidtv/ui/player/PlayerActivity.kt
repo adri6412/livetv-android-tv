@@ -125,6 +125,18 @@ class PlayerActivity : FragmentActivity() {
     // Flag per gestire il recovery dallo standby
     private var isStandbyRecoveryInProgress = false
     
+    // NUOVO: Timestamp ultimo avvio per evitare avvii multipli ravvicinati
+    private var lastPlayerStartTimestamp: Long = 0
+    private val MIN_START_INTERVAL_MS = 500L // Minimo 500ms tra un avvio e l'altro (permette zapping rapido)
+    
+    // NUOVO: Handler centralizzato per timeout buffering
+    private val bufferingTimeoutHandler = Handler(Looper.getMainLooper())
+    private var bufferingTimeoutRunnable: Runnable? = null
+    
+    // NUOVO: Handler per retry playback
+    private val retryHandler = Handler(Looper.getMainLooper())
+    private var retryRunnable: Runnable? = null
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -316,6 +328,14 @@ class PlayerActivity : FragmentActivity() {
     private fun startPlayerSafely(channel: Channel) {
         writeToLog("startPlayerSafely chiamato per: ${channel.name}")
         
+        // NUOVO: Controllo timestamp per evitare avvii troppo ravvicinati (debouncing)
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastStart = currentTime - lastPlayerStartTimestamp
+        if (timeSinceLastStart < MIN_START_INTERVAL_MS && lastPlayerStartTimestamp > 0) {
+            writeToLog("DEBOUNCING: Avvio troppo ravvicinato (${timeSinceLastStart}ms) - salto startPlayerSafely")
+            return
+        }
+        
         // CONTROLLO CENTRALIZZATO: Evita avvii multipli
         if (isAnyPlayerOperationInProgress) {
             writeToLog("Operazione player già in corso - salto startPlayerSafely")
@@ -338,6 +358,9 @@ class PlayerActivity : FragmentActivity() {
             writeToLog("Player già attivo per lo stesso canale - salto startPlayerSafely")
             return
         }
+        
+        // Aggiorna timestamp
+        lastPlayerStartTimestamp = currentTime
         
         isAnyPlayerOperationInProgress = true
         isPlayChannelInProgress = true
@@ -2187,29 +2210,24 @@ class PlayerActivity : FragmentActivity() {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.textStatus.text = "Ripristino dopo standby..."
                     binding.textStatus.visibility = View.VISIBLE
+                    // Usa timeout ridotto durante recovery standby
+                    startBufferingTimeout(5000)
                 } else {
                     // Remove buffering text and progress bar for better UX
                     binding.progressBar.visibility = View.GONE
                     binding.textStatus.visibility = View.GONE
                     
-                    // CONTROLLO BUFFERING INFINITO: Se il buffering dura troppo, reset completo
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if (exoPlayer?.playbackState == Player.STATE_BUFFERING) {
-                            writeToLog("BUFFERING INFINITO rilevato - reset completo player")
-                            releasePlayerCompletely()
-                            currentChannel?.let { channel ->
-                                Handler(Looper.getMainLooper()).postDelayed({
-                                    startPlayerSafely(channel)
-                                }, 1000)
-                            }
-                        }
-                    }, 8000) // Timeout di 8 secondi per buffering infinito
+                    // NUOVO: Usa gestione centralizzata del timeout buffering
+                    startBufferingTimeout(8000)
                 }
             }
             Player.STATE_READY -> {
                 writeToLog("Stato: READY")
                 binding.progressBar.visibility = View.GONE
                 binding.textStatus.visibility = View.GONE
+                
+                // NUOVO: Cancella timeout buffering quando il player è pronto
+                cancelBufferingTimeout()
                 
                 // Se siamo in recovery standby, segna come completato
                 if (isStandbyRecoveryInProgress) {
@@ -2221,13 +2239,14 @@ class PlayerActivity : FragmentActivity() {
                 binding.textStatus.text = getString(R.string.player_no_signal)
                 binding.textStatus.visibility = View.VISIBLE
                 
+                // Cancella timeout buffering
+                cancelBufferingTimeout()
+                
                 // Se siamo in recovery standby e il player è terminato, riprova
                 if (isStandbyRecoveryInProgress) {
                     writeToLog("Player terminato durante recovery standby - riprovo")
                     currentChannel?.let { channel ->
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            retryPlaybackWithTimeout(channel, maxRetries = 2, delayMs = 1000)
-                        }, 1000)
+                        schedulePlayerRestart(channel, 1000)
                     }
                 }
             }
@@ -2236,13 +2255,14 @@ class PlayerActivity : FragmentActivity() {
                 binding.textStatus.text = getString(R.string.player_loading)
                 binding.textStatus.visibility = View.VISIBLE
                 
+                // Cancella timeout buffering
+                cancelBufferingTimeout()
+                
                 // Se siamo in recovery standby e il player è idle, riprova
                 if (isStandbyRecoveryInProgress) {
                     writeToLog("Player idle durante recovery standby - riprovo")
                     currentChannel?.let { channel ->
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            retryPlaybackWithTimeout(channel, maxRetries = 2, delayMs = 1000)
-                        }, 1000)
+                        schedulePlayerRestart(channel, 1000)
                     }
                 }
             }
@@ -2352,11 +2372,10 @@ class PlayerActivity : FragmentActivity() {
             error.errorCode != PlaybackException.ERROR_CODE_DECODER_QUERY_FAILED) {
             
             Log.d("PlayerActivity", "Tentativo di riavvio automatico del player")
-            Handler(Looper.getMainLooper()).postDelayed({
-                currentChannel?.let { channel ->
-                    startPlayerSafely(channel)
-                }
-            }, 3000)
+            // NUOVO: Usa schedulePlayerRestart centralizzato
+            currentChannel?.let { channel ->
+                schedulePlayerRestart(channel, 3000)
+            }
         }
         
         Log.e("PlayerActivity", "Messaggio errore mostrato: $errorMessage")
@@ -2435,17 +2454,22 @@ class PlayerActivity : FragmentActivity() {
                 error.errorCode == PlaybackException.ERROR_CODE_TIMEOUT) {
                 
                 Log.d("PlayerActivity", "Errore di connessione - reinizializzo player")
-                Handler(Looper.getMainLooper()).postDelayed({
-                    reinitializePlayer()
-                }, 2000) // Reinizializza dopo 2 secondi
+                // NUOVO: Usa handler centralizzato per evitare conflitti
+                retryRunnable?.let { retryHandler.removeCallbacks(it) }
+                retryRunnable = Runnable {
+                    try {
+                        reinitializePlayer()
+                    } catch (e: Exception) {
+                        writeToLog("ERRORE nel reinitialize programmato: ${e.message}")
+                    }
+                }
+                retryHandler.postDelayed(retryRunnable!!, 2000)
             } else {
                 // Per altri errori, riavvia normalmente
-            Handler(Looper.getMainLooper()).postDelayed({
                 currentChannel?.let { channel ->
                     Log.d("PlayerActivity", "Riavvio automatico del canale DVB-T: ${channel.name}")
-                        startPlayerSafely(channel)
+                    schedulePlayerRestart(channel, 3000)
                 }
-            }, 3000) // Riavvio dopo 3 secondi
             }
         }
     }
@@ -2522,6 +2546,7 @@ class PlayerActivity : FragmentActivity() {
             }
             
             // GARANZIA: Rilascia completamente il player precedente per cambio canale
+            // Questo include la cancellazione di tutti i callback e il reset del timestamp
             releasePlayerCompletely()
             
             viewModel.getAdjacentChannel(currentChannel!!, direction) { newChannel ->
@@ -2532,6 +2557,7 @@ class PlayerActivity : FragmentActivity() {
                     currentChannel = newChannel
                     
                     // Start playback immediately for faster response
+                    // Il timestamp è stato resettato in releasePlayerCompletely, quindi non ci sono blocchi
                     startPlayerSafely(newChannel)
                     
                     // Run UI updates in background to not block playback
@@ -3128,20 +3154,17 @@ class PlayerActivity : FragmentActivity() {
             // Forza garbage collection per pulire risorse audio
             System.gc()
             
-            // Aspetta un momento per la stabilizzazione
-            Handler(Looper.getMainLooper()).postDelayed({
-                // Riprova la riproduzione del canale corrente
-                currentChannel?.let { channel ->
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.textStatus.text = "Recovery audio in corso..."
-                    binding.textStatus.visibility = View.VISIBLE
-                    
-                    writeToLog("Avvio recovery per canale: ${channel.name}")
-                    
-                    // Riprova la connessione con recovery completo
-                    startPlayerSafely(channel)
-                }
-            }, 1000)
+            // NUOVO: Usa schedulePlayerRestart centralizzato
+            currentChannel?.let { channel ->
+                binding.progressBar.visibility = View.VISIBLE
+                binding.textStatus.text = "Recovery audio in corso..."
+                binding.textStatus.visibility = View.VISIBLE
+                
+                writeToLog("Avvio recovery per canale: ${channel.name}")
+                
+                // Riprova la connessione con recovery completo usando handler centralizzato
+                schedulePlayerRestart(channel, 1000)
+            }
             
         } catch (e: Exception) {
             writeToLog("ERRORE durante retryPlayback: ${e.message}")
@@ -3156,12 +3179,11 @@ class PlayerActivity : FragmentActivity() {
     private fun retryPlaybackWithTimeout(channel: Channel, maxRetries: Int = 3, delayMs: Long = 2000) {
         writeToLog("Retry playback con timeout per: ${channel.name} (tentativo ${maxRetries})")
         
-        // Se siamo in recovery standby, aspetta
-        if (isStandbyRecoveryInProgress) {
-            writeToLog("Recovery standby in corso - aspetto prima del retry")
-            Handler(Looper.getMainLooper()).postDelayed({
-                retryPlaybackWithTimeout(channel, maxRetries, delayMs)
-            }, 1000)
+        // NUOVO: Usa il debouncing - se un retry è già in corso, salto
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastStart = currentTime - lastPlayerStartTimestamp
+        if (timeSinceLastStart < MIN_START_INTERVAL_MS && lastPlayerStartTimestamp > 0) {
+            writeToLog("DEBOUNCING: Retry troppo ravvicinato - salto")
             return
         }
         
@@ -3194,28 +3216,17 @@ class PlayerActivity : FragmentActivity() {
                 releasePlayerCompletely()
             }
             
-            // Aspetta un momento prima del retry
-            Handler(Looper.getMainLooper()).postDelayed({
-                startPlayerSafely(channel)
-                
-                // Controlla se il retry ha funzionato dopo un delay
-                Handler(Looper.getMainLooper()).postDelayed({
-                    if (exoPlayer?.playbackState != Player.STATE_READY) {
-                        writeToLog("Retry fallito - riprovo")
-                        retryPlaybackWithTimeout(channel, maxRetries - 1, delayMs)
-                    } else {
-                        writeToLog("Retry riuscito - player pronto")
-                    }
-                }, 5000) // Controlla dopo 5 secondi
-                
-            }, delayMs)
+            // NUOVO: Usa schedulePlayerRestart invece di Handler annidati
+            schedulePlayerRestart(channel, delayMs)
+            
+            // NOTA: Non scheduliamo più un controllo successivo con Handler annidato.
+            // Il sistema di buffering timeout gestirà automaticamente i problemi
+            // e il debouncing eviterà retry multipli ravvicinati
             
         } catch (e: Exception) {
             writeToLog("ERRORE durante retry con timeout: ${e.message}")
-            // Riprova con un delay più lungo
-            Handler(Looper.getMainLooper()).postDelayed({
-                retryPlaybackWithTimeout(channel, maxRetries - 1, delayMs + 1000)
-            }, delayMs)
+            // NUOVO: Anche qui usa schedulePlayerRestart invece di Handler
+            schedulePlayerRestart(channel, delayMs + 1000)
         }
     }
     
@@ -3363,18 +3374,9 @@ class PlayerActivity : FragmentActivity() {
                         exoPlayer?.play()
                     }
                     Player.STATE_BUFFERING -> {
-                        writeToLog("Player in buffering - controllo timeout")
-                        // Controlla se il buffering è bloccato (timeout ridotto a 5 secondi per standby)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            if (exoPlayer?.playbackState == Player.STATE_BUFFERING) {
-                                writeToLog("Buffering timeout - reset completo player")
-                                // Reset completo invece di semplice riavvio
-                                releasePlayerCompletely()
-                                Handler(Looper.getMainLooper()).postDelayed({
-                                    startPlayerSafely(currentChannel!!)
-                                }, 1000)
-                            }
-                        }, 5000) // Timeout ridotto a 5 secondi
+                        writeToLog("Player in buffering - avvio timeout centralizzato")
+                        // NUOVO: Usa startBufferingTimeout centralizzato per evitare handler multipli
+                        startBufferingTimeout(5000) // Timeout ridotto a 5 secondi per standby
                     }
                     Player.STATE_ENDED -> {
                         writeToLog("Player terminato - riavvio con startPlayerSafely")
@@ -3408,6 +3410,9 @@ class PlayerActivity : FragmentActivity() {
         try {
             writeToLog("Rilascio completo del player")
             
+            // NUOVO: Cancella TUTTI i callback pending prima di rilasciare
+            cancelAllPendingCallbacks()
+            
             exoPlayer?.let { player ->
                 player.stop()
                 player.release()
@@ -3421,10 +3426,114 @@ class PlayerActivity : FragmentActivity() {
             isPlayChannelInProgress = false
             isAnyPlayerOperationInProgress = false
             
+            // CORREZIONE: Reset timestamp per permettere nuovo avvio immediato dopo rilascio
+            // Questo permette cambi canale rapidi senza blocchi
+            lastPlayerStartTimestamp = 0
+            writeToLog("Timestamp reset - nuovo avvio permesso")
+            
         } catch (e: Exception) {
             writeToLog("ERRORE nel rilascio completo player: ${e.message}")
             Log.e("PlayerActivity", "Error releasing player completely", e)
         }
+    }
+    
+    /**
+     * NUOVO: Cancella tutti i callback pending per evitare operazioni multiple
+     */
+    private fun cancelAllPendingCallbacks() {
+        writeToLog("Cancellazione tutti i callback pending")
+        
+        try {
+            // Cancella timeout buffering
+            bufferingTimeoutRunnable?.let { bufferingTimeoutHandler.removeCallbacks(it) }
+            bufferingTimeoutRunnable = null
+            
+            // Cancella retry playback
+            retryRunnable?.let { retryHandler.removeCallbacks(it) }
+            retryRunnable = null
+            
+            // Cancella controlli UI
+            controlsRunnable?.let { controlsHandler.removeCallbacks(it) }
+            
+            // Cancella input numerico
+            numberInputRunnable?.let { numberInputHandler.removeCallbacks(it) }
+            
+            writeToLog("Tutti i callback cancellati con successo")
+            
+        } catch (e: Exception) {
+            writeToLog("ERRORE nella cancellazione callback: ${e.message}")
+            Log.e("PlayerActivity", "Error cancelling callbacks", e)
+        }
+    }
+    
+    /**
+     * NUOVO: Gestione centralizzata del timeout buffering per evitare handler multipli
+     */
+    @UnstableApi
+    private fun startBufferingTimeout(timeoutMs: Long = 8000) {
+        // Cancella eventuali timeout precedenti
+        bufferingTimeoutRunnable?.let { bufferingTimeoutHandler.removeCallbacks(it) }
+        
+        writeToLog("Avvio timeout buffering: ${timeoutMs}ms")
+        
+        bufferingTimeoutRunnable = Runnable {
+            try {
+                if (exoPlayer?.playbackState == Player.STATE_BUFFERING) {
+                    writeToLog("TIMEOUT BUFFERING rilevato dopo ${timeoutMs}ms - reset completo player")
+                    
+                    val channelToRestart = currentChannel
+                    
+                    // Rilascia completamente (che cancella anche tutti i callback)
+                    releasePlayerCompletely()
+                    
+                    // Riavvia dopo un piccolo delay, usando il nostro retry handler centralizzato
+                    channelToRestart?.let { channel ->
+                        schedulePlayerRestart(channel, 1000)
+                    }
+                } else {
+                    writeToLog("Player non più in buffering - timeout annullato")
+                }
+            } catch (e: Exception) {
+                writeToLog("ERRORE nel timeout buffering: ${e.message}")
+                Log.e("PlayerActivity", "Error in buffering timeout", e)
+            }
+        }
+        
+        bufferingTimeoutHandler.postDelayed(bufferingTimeoutRunnable!!, timeoutMs)
+    }
+    
+    /**
+     * NUOVO: Cancella il timeout buffering
+     */
+    private fun cancelBufferingTimeout() {
+        bufferingTimeoutRunnable?.let { 
+            bufferingTimeoutHandler.removeCallbacks(it)
+            bufferingTimeoutRunnable = null
+            writeToLog("Timeout buffering cancellato")
+        }
+    }
+    
+    /**
+     * NUOVO: Gestione centralizzata del riavvio player per evitare handler multipli
+     */
+    @UnstableApi
+    private fun schedulePlayerRestart(channel: Channel, delayMs: Long) {
+        // Cancella eventuali restart precedenti
+        retryRunnable?.let { retryHandler.removeCallbacks(it) }
+        
+        writeToLog("Programmato riavvio player per ${channel.name} tra ${delayMs}ms")
+        
+        retryRunnable = Runnable {
+            try {
+                writeToLog("Esecuzione riavvio programmato per ${channel.name}")
+                startPlayerSafely(channel)
+            } catch (e: Exception) {
+                writeToLog("ERRORE nel riavvio programmato: ${e.message}")
+                Log.e("PlayerActivity", "Error in scheduled restart", e)
+            }
+        }
+        
+        retryHandler.postDelayed(retryRunnable!!, delayMs)
     }
     
     @UnstableApi
@@ -3514,20 +3623,23 @@ class PlayerActivity : FragmentActivity() {
         }
         
         // GARANZIA: Rilascia completamente il player precedente per cambio canale
+        // Questo resetta anche il timestamp, permettendo avvio immediato
         releasePlayerCompletely()
         
         viewModel.getChannelByNumber(channelNumber) { channel ->
             if (channel != null) {
-                // Aspetta un momento per assicurarsi che il rilascio sia completato
+                currentChannel = channel
+                saveLastChannel(channel)
+                
+                // Avvio immediato senza delay - il timestamp è stato resettato
+                // Permette cambio canale rapido anche con input numerico
+                startPlayerSafely(channel)
+                
+                // Aggiorna UI dopo un piccolo delay
                 Handler(Looper.getMainLooper()).postDelayed({
-                    currentChannel = channel
-                    saveLastChannel(channel)
-                    startPlayerSafely(channel)
                     setupUI()
-                    
-                    // Mostra il popup del canale
                     showChannelPopup(channel)
-                }, 100) // Piccolo delay per assicurarsi che il rilascio sia completato
+                }, 150)
             } else {
                 // Mostra messaggio di errore
                 binding.textError.text = "Canale $channelNumber non trovato"
@@ -3902,33 +4014,31 @@ class PlayerActivity : FragmentActivity() {
             // Forza garbage collection per pulire le risorse
             System.gc()
             
-            // Aspetta che il sistema si stabilizzi (ridotto a 1 secondo per risposta più veloce)
-            Handler(Looper.getMainLooper()).postDelayed({
+            // NUOVO: Usa handler centralizzato per evitare conflitti
+            retryRunnable?.let { retryHandler.removeCallbacks(it) }
+            retryRunnable = Runnable {
                 try {
                     writeToLog("Sistema stabilizzato - ricreo player da zero")
                     
                     // Ricrea completamente il player da zero
                     setupPlayer()
                     
-                    // Aspetta un momento per l'inizializzazione
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        writeToLog("Player ricreato - riavvio riproduzione")
-                        isStandbyRecoveryInProgress = false
-                        
-                        // Se abbiamo un canale corrente, riavvia la riproduzione
-                        currentChannel?.let { channel ->
-                            writeToLog("Riavvio riproduzione dopo reset completo per: ${channel.name}")
-                            // Usa startPlayerSafely per un riavvio pulito
-                            startPlayerSafely(channel)
-                        }
-                    }, 1000)
+                    writeToLog("Player ricreato - riavvio riproduzione")
+                    isStandbyRecoveryInProgress = false
+                    
+                    // Se abbiamo un canale corrente, riavvia la riproduzione usando schedulePlayerRestart
+                    currentChannel?.let { channel ->
+                        writeToLog("Riavvio riproduzione dopo reset completo per: ${channel.name}")
+                        schedulePlayerRestart(channel, 1000)
+                    }
                     
                 } catch (e: Exception) {
                     writeToLog("ERRORE durante ricreazione player: ${e.message}")
                     Log.e("PlayerActivity", "Errore ricreazione player", e)
                     isStandbyRecoveryInProgress = false
                 }
-            }, 1000)
+            }
+            retryHandler.postDelayed(retryRunnable!!, 1000)
             
         } catch (e: Exception) {
             writeToLog("ERRORE in handleStandbyWakeup: ${e.message}")
