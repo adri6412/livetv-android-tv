@@ -1,0 +1,71 @@
+name: Bump Version & Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Tipo di bump'
+        required: true
+        type: choice
+        options:
+          - patch   # bug fix  →  1.5.31  →  1.5.32
+          - minor   # feature  →  1.5.31  →  1.6.0
+          - major   # breaking →  1.5.31  →  2.0.0
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read current version
+        id: current
+        run: |
+          VERSION=$(grep 'versionName' app/build.gradle | sed 's/.*"\(.*\)".*/\1/')
+          CODE=$(grep 'versionCode' app/build.gradle | grep -o '[0-9]*')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "code=$CODE"       >> "$GITHUB_OUTPUT"
+          echo "Current version: $VERSION (code $CODE)"
+
+      - name: Compute new version
+        id: next
+        run: |
+          IFS='.' read -ra V <<< "${{ steps.current.outputs.version }}"
+          MAJOR=${V[0]}; MINOR=${V[1]}; PATCH=${V[2]}
+
+          case "${{ inputs.bump }}" in
+            major) MAJOR=$((MAJOR+1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR+1));           PATCH=0 ;;
+            patch)                               PATCH=$((PATCH+1)) ;;
+          esac
+
+          NEW="${MAJOR}.${MINOR}.${PATCH}"
+          NEW_CODE=$(( ${{ steps.current.outputs.code }} + 1 ))
+          echo "version=$NEW"       >> "$GITHUB_OUTPUT"
+          echo "code=$NEW_CODE"     >> "$GITHUB_OUTPUT"
+          echo "tag=v${NEW}"        >> "$GITHUB_OUTPUT"
+          echo "New version: $NEW (code $NEW_CODE)"
+
+      - name: Update build.gradle
+        run: |
+          sed -i "s/versionName \"[^\"]*\"/versionName \"${{ steps.next.outputs.version }}\"/" app/build.gradle
+          sed -i "s/versionCode [0-9]*/versionCode ${{ steps.next.outputs.code }}/"            app/build.gradle
+          echo "--- build.gradle diff ---"
+          git diff app/build.gradle
+
+      - name: Commit, tag & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/build.gradle
+          git commit -m "chore: bump version to ${{ steps.next.outputs.version }}"
+          git tag "${{ steps.next.outputs.tag }}"
+          git push origin HEAD:main
+          git push origin "${{ steps.next.outputs.tag }}"
+          echo "Tagged ${{ steps.next.outputs.tag }} — build-signed-release.yml si avvierà automaticamente"
