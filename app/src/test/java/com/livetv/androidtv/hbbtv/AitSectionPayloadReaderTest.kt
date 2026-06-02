@@ -35,7 +35,7 @@ class AitSectionPayloadReaderTest {
                 url.url == "https://example.com/hbbtv/index.html" &&
                 url.autostart == true &&
                 url.appId == 0x12345678 &&
-                url.orgId == 0x87654321
+                url.orgId == 0x87654321.toInt()
             }
         )
     }
@@ -159,7 +159,7 @@ class AitSectionPayloadReaderTest {
         if (hasHttpApp) {
             // Add HTTP application
             section.addAll(createHttpApplication(
-                orgId = 0x87654321,
+                orgId = 0x87654321.toInt(),
                 appId = 0x12345678,
                 isAutostart = isAutostart,
                 urlBase = urlBase ?: "https://example.com",
@@ -187,7 +187,7 @@ class AitSectionPayloadReaderTest {
         section[10] = (appLoopLength and 0xFF).toByte()
         
         // Add CRC32 (valid or invalid)
-        val crc = if (invalidCrc) 0xDEADBEEF else calculateCrc32(section.toByteArray())
+        val crc: Int = if (invalidCrc) 0xDEADBEEF.toInt() else calculateCrc32(section.toByteArray())
         section.add((crc shr 24).toByte())
         section.add((crc shr 16).toByte())
         section.add((crc shr 8).toByte())
@@ -327,8 +327,8 @@ class AitSectionPayloadReaderTest {
         
         // Add autostart HTTP application
         section.addAll(createHttpApplication(
-            orgId = 0xAAAAAAAA,
-            appId = 0xBBBBBBBB,
+            orgId = 0xAAAAAAAA.toInt(),
+            appId = 0xBBBBBBBB.toInt(),
             isAutostart = true,
             urlBase = "https://autostart.example.com",
             urlExtension = "",
@@ -337,8 +337,8 @@ class AitSectionPayloadReaderTest {
         
         // Add non-autostart HTTP application
         section.addAll(createHttpApplication(
-            orgId = 0xCCCCCCCC,
-            appId = 0xDDDDDDDD,
+            orgId = 0xCCCCCCCC.toInt(),
+            appId = 0xDDDDDDDD.toInt(),
             isAutostart = false,
             urlBase = "https://normal.example.com",
             urlExtension = "",
