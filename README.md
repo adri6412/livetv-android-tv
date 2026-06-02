@@ -252,6 +252,16 @@ adb logcat | grep "LiveTV"
 ### 🚧 Future Features
 - [ ] **Complete HbbTV**: Complete implementation of interactive services
 
+## Legal Disclaimer
+
+This application is a **generic multimedia player**. It does not include, distribute, or provide access to channel lists, streams, or any copyrighted content.
+
+**The user is solely responsible for using only content for which they hold viewing rights.** Using this app to access broadcasts without proper authorization may constitute a violation of copyright laws in your country.
+
+The developers assume no liability for any unlawful use of this application.
+
+---
+
 ## License
 
 This project is released under Mozilla Public License 2.0 (MPL 2.0). See `LICENSE` file for details.
