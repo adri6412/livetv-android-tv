@@ -193,3 +193,4 @@ dmypy.json
 # Android specific
 *.keystore
 !debug.keystore
+channels.xml
