@@ -423,17 +423,26 @@ class SettingsActivity : FragmentActivity() {
             .setMessage("""
                 LiveTV per Android TV
                 Versione 1.0.0
-                
-                Decoder digitale terrestre via IP
+
+                Player IPTV generico per Android TV
                 Supporto M3U/M3U8 e XMLTV
                 Compatibile con TVHeadend
                 Supporto HbbTV integrato
-                
+
                 Sviluppato per Android TV
+
+                ──────────────────────────
+                AVVISO LEGALE
+
+                Questa applicazione è un player multimediale generico. Non include, distribuisce né fornisce accesso a liste di canali o contenuti protetti da copyright.
+
+                L'utente è il solo responsabile di utilizzare esclusivamente contenuti per i quali possiede i diritti di visione. L'uso di questa app per accedere a trasmissioni senza la dovuta autorizzazione può costituire violazione delle leggi sul diritto d'autore vigenti nel proprio paese.
+
+                Gli sviluppatori declinano ogni responsabilità per un uso illecito dell'applicazione.
             """.trimIndent())
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .create()
-        
+
         dialog.show()
     }
     
