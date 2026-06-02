@@ -23,6 +23,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # PAT necessario: il GITHUB_TOKEN non trigghera altri workflow
+          token: ${{ secrets.GH_PAT }}
 
       - name: Read current version
         id: current
