@@ -18,7 +18,7 @@ import com.livetv.androidtv.data.dao.EPGDao
 
 @Database(
     entities = [Channel::class, Program::class, Playlist::class, EPGProgram::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -40,7 +40,7 @@ abstract class LiveTVDatabase : RoomDatabase() {
                     LiveTVDatabase::class.java,
                     "livetv_database"
                 )
-                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
                 INSTANCE = instance
                 instance
@@ -106,6 +106,17 @@ abstract class LiveTVDatabase : RoomDatabase() {
             }
         }
         
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                try {
+                    database.execSQL("ALTER TABLE channels ADD COLUMN httpUserAgent TEXT")
+                    android.util.Log.d("LiveTVDatabase", "Migrazione 5->6 completata: aggiunto campo httpUserAgent")
+                } catch (e: Exception) {
+                    android.util.Log.w("LiveTVDatabase", "Errore durante la migrazione 5->6", e)
+                }
+            }
+        }
+
         private val MIGRATION_4_5 = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Migrazione sicura da versione 4 a 5

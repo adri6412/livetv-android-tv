@@ -53,6 +53,12 @@ import android.webkit.WebViewClient
 import android.webkit.WebSettings
 import com.livetv.androidtv.hbbtv.HbbTvAppUrl
 import com.livetv.androidtv.ts.MyTsPayloadReaderFactory
+import android.net.Uri
+import androidx.media3.common.C
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DataSpec
+import androidx.media3.datasource.HttpDataSource
+import androidx.media3.datasource.TransferListener
 
 @UnstableApi
 class PlayerActivity : FragmentActivity() {
@@ -278,9 +284,8 @@ class PlayerActivity : FragmentActivity() {
         isInitializationInProgress = true
         writeToLog("Inizio inizializzazione player")
         
-        // Check if RAI channel and set static HbbTV URL
         checkRaiChannelForHbbTv()
-        
+
         setupPlayer()
         configureCodecs() // Verifica supporto codec DVB-T
         setupUI()
@@ -384,9 +389,10 @@ class PlayerActivity : FragmentActivity() {
             
             // Imposta il canale corrente
             currentChannel = channel
-            
-            // Crea e imposta il MediaSource
-            val mediaSource = createTsMediaSource(channel.streamUrl)
+
+            // Crea e imposta il MediaSource (con User-Agent se presente nel canale)
+            val headers = channel.httpUserAgent?.let { mapOf("User-Agent" to it) } ?: emptyMap()
+            val mediaSource = createTsMediaSource(channel.streamUrl, headers)
             exoPlayer?.apply {
                 setMediaSource(mediaSource)
                 prepare()
@@ -499,6 +505,10 @@ class PlayerActivity : FragmentActivity() {
             
             // Rilevamento basato sull'URL
             when {
+                url.contains(".m3u8") || url.contains("application/x-mpegurl") -> {
+                    writeToLog("Container rilevato: HLS")
+                    MimeTypes.APPLICATION_M3U8
+                }
                 url.contains(".ts") || url.contains("mpeg-ts") -> {
                     writeToLog("Container rilevato: MPEG-TS")
                     "video/mp2t"
@@ -2095,11 +2105,11 @@ class PlayerActivity : FragmentActivity() {
                 setupPlayer()
             }
             
-            // Optimize: Create MediaSource first for faster attachment
-            val mediaSource = createTsMediaSource(channel.streamUrl)
-            
+            // Create MediaSource with channel-specific HTTP headers
+            val headers = channel.httpUserAgent?.let { mapOf("User-Agent" to it) } ?: emptyMap()
+            val mediaSource = createTsMediaSource(channel.streamUrl, headers)
+
             exoPlayer?.apply {
-                // Optimize: Set media source and prepare immediately
                 setMediaSource(mediaSource)
                 prepare()
                 play()
@@ -2110,7 +2120,6 @@ class PlayerActivity : FragmentActivity() {
             
             // Optimize: Run HbbTV operations in background to not block playback
             runOnUiThread {
-            // Check if RAI channel and set static HbbTV URL
             checkRaiChannelForHbbTv()
             
             // Clear HbbTV state for new channel (but preserve RAI state)
@@ -2146,53 +2155,172 @@ class PlayerActivity : FragmentActivity() {
     }
 
     /**
-     * Create a MediaSource optimized for Mi Box with support for multiple containers (MPEG-TS, Matroska)
+     * Wraps a DataSource and logs request/response/body only for playlist-level requests.
+     * HLS media segments (.ts, .m4s, .aac, fMP4) are silently passed through to avoid
+     * flooding logcat with hundreds of per-chunk entries.
+     * Peeked bytes are transparently re-emitted so the player never loses data.
      */
     @UnstableApi
-    private fun createTsMediaSource(streamUrl: String): androidx.media3.exoplayer.source.MediaSource {
-        try {
-            Log.d("PlayerActivity", "Creating optimized MediaSource for Mi Box: $streamUrl")
-            
-            // Rileva il tipo di container dall'URL o usa auto-detection
-            val containerType = detectContainerType(streamUrl)
-            Log.d("PlayerActivity", "Container type detected: $containerType")
-            
-            // Configurazione ottimizzata per Mi Box con supporto multi-container
-            val extractorsFactory = androidx.media3.extractor.DefaultExtractorsFactory().apply {
-                // Abilita il supporto per tutti i formati audio comuni
-                setConstantBitrateSeekingEnabled(true)
+    private inner class LoggingDataSource(private val wrapped: DataSource) : DataSource {
+
+        private var peekBuffer: ByteArray? = null
+        private var peekOffset = 0
+
+        override fun addTransferListener(transferListener: TransferListener) =
+            wrapped.addTransferListener(transferListener)
+
+        /** Returns true for HLS/DASH media segments that should not be logged. */
+        private fun isMediaSegment(uri: Uri): Boolean {
+            val path = uri.path?.lowercase() ?: return false
+            return path.endsWith(".ts") ||
+                   path.endsWith(".m4s") ||
+                   path.endsWith(".aac") ||
+                   path.endsWith(".m4a") ||
+                   path.endsWith(".m4v") ||
+                   path.endsWith(".cmfv") ||
+                   path.endsWith(".cmfa")
+        }
+
+        override fun open(dataSpec: DataSpec): Long {
+            val logThis = !isMediaSegment(dataSpec.uri)
+
+            if (logThis) {
+                Log.d("HTTP_LOG", "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                Log.d("HTTP_LOG", "▶ URI: ${dataSpec.uri}")
+                dataSpec.httpRequestHeaders.forEach { (k, v) ->
+                    Log.d("HTTP_LOG", "  Req  [$k]: $v")
+                }
             }
-            
-            // Crea MediaItem con MIME type appropriato
-            val mediaItem = androidx.media3.common.MediaItem.Builder()
-                .setUri(streamUrl)
-                .apply {
-                    // Specifica MIME type solo se rilevato, altrimenti lascia auto-detection
-                    if (containerType != "auto") {
-                        setMimeType(containerType)
+
+            return try {
+                val length = wrapped.open(dataSpec)
+
+                if (logThis) {
+                    // Response headers (null key = HTTP status line from HttpURLConnection)
+                    if (wrapped is HttpDataSource) {
+                        Log.d("HTTP_LOG", "◀ Response headers:")
+                        wrapped.responseHeaders.forEach { (k, v) ->
+                            Log.d("HTTP_LOG", "  Resp [${k ?: "status"}]: ${v.joinToString()}")
+                        }
+                    }
+
+                    // Peek first 300 bytes to detect actual content (M3U8, TS, HTML, etc.)
+                    val buf = ByteArray(300)
+                    var total = 0
+                    try {
+                        while (total < buf.size) {
+                            val n = wrapped.read(buf, total, buf.size - total)
+                            if (n == C.RESULT_END_OF_INPUT) break
+                            total += n
+                        }
+                    } catch (_: Exception) {}
+
+                    if (total > 0) {
+                        peekBuffer = buf.copyOf(total)
+                        peekOffset = 0
+                        val preview = runCatching {
+                            String(peekBuffer!!, Charsets.UTF_8)
+                                .take(250)
+                                .replace('\r', ' ')
+                                .replace('\n', '↵')
+                        }.getOrElse {
+                            peekBuffer!!.take(32).joinToString(" ") { b ->
+                                b.toInt().and(0xFF).toString(16).padStart(2, '0')
+                            }
+                        }
+                        Log.d("HTTP_LOG", "  Body [$total B]: $preview")
                     }
                 }
+
+                length
+            } catch (e: Exception) {
+                if (logThis) Log.e("HTTP_LOG", "✗ Errore open: ${e.javaClass.simpleName}: ${e.message}")
+                throw e
+            }
+        }
+
+        override fun read(buffer: ByteArray, offset: Int, length: Int): Int {
+            val peek = peekBuffer
+            if (peek != null && peekOffset < peek.size) {
+                val toCopy = minOf(length, peek.size - peekOffset)
+                peek.copyInto(buffer, offset, peekOffset, peekOffset + toCopy)
+                peekOffset += toCopy
+                if (peekOffset >= peek.size) peekBuffer = null
+                return toCopy
+            }
+            return wrapped.read(buffer, offset, length)
+        }
+
+        override fun getUri(): Uri? = wrapped.uri
+
+        override fun getResponseHeaders(): Map<String, List<String>> = wrapped.responseHeaders
+
+        override fun close() {
+            peekBuffer = null
+            wrapped.close()
+        }
+    }
+
+    @UnstableApi
+    private fun buildLoggingDataSourceFactory(httpHeaders: Map<String, String>): DataSource.Factory {
+        val httpFactory = androidx.media3.datasource.DefaultHttpDataSource.Factory().apply {
+            setAllowCrossProtocolRedirects(true)
+            if (httpHeaders.isNotEmpty()) {
+                setDefaultRequestProperties(httpHeaders)
+            }
+        }
+        val baseFactory = androidx.media3.datasource.DefaultDataSource.Factory(this, httpFactory)
+        return DataSource.Factory { LoggingDataSource(baseFactory.createDataSource()) }
+    }
+
+    /**
+     * Create a MediaSource with proper HTTP headers and cross-protocol redirect support.
+     * Uses DefaultMediaSourceFactory so HLS (.m3u8) is handled via HlsMediaSource automatically.
+     */
+    @UnstableApi
+    private fun createTsMediaSource(
+        streamUrl: String,
+        httpHeaders: Map<String, String> = emptyMap()
+    ): androidx.media3.exoplayer.source.MediaSource {
+        try {
+            Log.d("PlayerActivity", "Creating MediaSource: $streamUrl headers=$httpHeaders")
+
+            val containerType = detectContainerType(streamUrl)
+            Log.d("PlayerActivity", "Container type detected: $containerType")
+
+            val extractorsFactory = androidx.media3.extractor.DefaultExtractorsFactory().apply {
+                setConstantBitrateSeekingEnabled(true)
+            }
+
+            // Logging factory: logs URI, request headers, response headers, and first 300B of body
+            val dataSourceFactory = buildLoggingDataSourceFactory(httpHeaders)
+
+            // For URLs with no recognizable extension ("auto"), default to HLS:
+            // Many IPTV relinker URLs redirect to an M3U8 playlist, so ProgressiveMediaSource
+            // would fail with UnrecognizedInputFormatException when it receives the playlist text.
+            // Raw MPEG-TS streams should always have ".ts" in the URL to override this default.
+            val resolvedMimeType = if (containerType == "auto") MimeTypes.APPLICATION_M3U8 else containerType
+
+            val mediaItem = androidx.media3.common.MediaItem.Builder()
+                .setUri(streamUrl)
+                .setMimeType(resolvedMimeType)
                 .build()
-            
-            // Usa DefaultExtractorsFactory configurato per Mi Box
-            val mediaSourceFactory = androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory(
-                androidx.media3.datasource.DefaultDataSource.Factory(this),
-                extractorsFactory
+
+            // DefaultMediaSourceFactory routes to HlsMediaSource for M3U8, ProgressiveMediaSource otherwise
+            val mediaSourceFactory = androidx.media3.exoplayer.source.DefaultMediaSourceFactory(
+                dataSourceFactory, extractorsFactory
             )
-            
-            val mediaSource = mediaSourceFactory.createMediaSource(mediaItem)
-            
-            Log.d("PlayerActivity", "MediaSource creato con supporto $containerType per Mi Box")
-            return mediaSource
-            
+
+            Log.d("PlayerActivity", "MediaSource creato: tipo=$resolvedMimeType (rilevato=$containerType)")
+            return mediaSourceFactory.createMediaSource(mediaItem)
+
         } catch (e: Exception) {
             Log.e("PlayerActivity", "Error creating MediaSource", e)
-            
-            // Fallback semplice per Mi Box
+
             val fallbackMediaItem = androidx.media3.common.MediaItem.Builder()
                 .setUri(streamUrl)
                 .build()
-            
+
             return androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory(
                 androidx.media3.datasource.DefaultDataSource.Factory(this)
             ).createMediaSource(fallbackMediaItem)
@@ -2562,7 +2690,6 @@ class PlayerActivity : FragmentActivity() {
                     
                     // Run UI updates in background to not block playback
                     runOnUiThread {
-                    // Check if RAI channel and set static HbbTV URL
                     checkRaiChannelForHbbTv()
                     
                     // Salva il nuovo canale come ultimo visualizzato

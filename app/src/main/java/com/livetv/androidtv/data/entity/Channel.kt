@@ -22,6 +22,7 @@ data class Channel(
     val audioTracks: List<String> = emptyList(),
     val subtitleTracks: List<String> = emptyList(),
     val hbbtvUrl: String? = null,
+    val httpUserAgent: String? = null,
     val quality: String? = null,
     val codec: String? = null,
     val bitrate: Int? = null,
@@ -67,10 +68,11 @@ data class Channel(
             val logo = attributes["tvg-logo"]
             val epgId = attributes["tvg-id"]
             val hbbtvUrl = attributes["hbbtv-url"]
-            
+            val httpUserAgent = attributes["http-user-agent"]
+
             // Estrai il nome del canale per il matching EPG (rimuovi numeri e trattini)
             val epgDisplayName = name.replace(Regex("^[0-9]+\\s*-\\s*"), "").trim()
-            
+
             return Channel(
                 id = id,
                 number = number,
@@ -81,6 +83,7 @@ data class Channel(
                 epgId = epgId,
                 epgDisplayName = epgDisplayName,
                 hbbtvUrl = hbbtvUrl,
+                httpUserAgent = httpUserAgent,
                 isHD = name.contains("HD", ignoreCase = true) || 
                        attributes["resolution"]?.contains("1080") == true ||
                        attributes["resolution"]?.contains("720") == true

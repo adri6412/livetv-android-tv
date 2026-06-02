@@ -18,8 +18,9 @@ class M3UParser {
             
             var line: String?
             var currentExtinf: String? = null
+            var pendingUserAgent: String? = null
             var channelNumber = 1
-            
+
             try {
                 while (reader.readLine().also { line = it } != null) {
                     line?.let { currentLine ->
@@ -29,18 +30,25 @@ class M3UParser {
                             }
                             currentLine.startsWith("#EXTINF:") -> {
                                 currentExtinf = currentLine
+                                pendingUserAgent = null
+                            }
+                            currentLine.startsWith("#EXTVLCOPT:http-user-agent=") -> {
+                                pendingUserAgent = currentLine
+                                    .substringAfter("#EXTVLCOPT:http-user-agent=")
+                                    .trim()
                             }
                             currentLine.startsWith("#") -> {
                                 // Altri commenti, ignora
                             }
                             currentLine.trim().isNotEmpty() && currentExtinf != null -> {
                                 // Questa è una URL di stream
-                                val channel = parseChannel(currentExtinf!!, currentLine.trim(), channelNumber)
+                                val channel = parseChannel(currentExtinf!!, currentLine.trim(), channelNumber, pendingUserAgent)
                                 if (channel != null) {
                                     channels.add(channel)
                                     channelNumber++
                                 }
                                 currentExtinf = null
+                                pendingUserAgent = null
                             }
                         }
                     }
@@ -54,30 +62,34 @@ class M3UParser {
             return channels
         }
         
-        private fun parseChannel(extinf: String, url: String, defaultNumber: Int): Channel? {
+        private fun parseChannel(extinf: String, url: String, defaultNumber: Int, httpUserAgent: String? = null): Channel? {
             try {
                 val pattern = Pattern.compile(EXTINF_PATTERN)
                 val matcher = pattern.matcher(extinf)
-                
+
                 if (!matcher.find()) return null
-                
-                val duration = matcher.group(1)?.toDoubleOrNull() ?: -1.0
+
                 val info = matcher.group(2) ?: ""
-                
+
                 // Estrai attributi e nome del canale
-                val attributes = extractAttributes(info)
+                val baseAttributes = extractAttributes(info)
+                val attributes = if (httpUserAgent != null) {
+                    baseAttributes + mapOf("http-user-agent" to httpUserAgent)
+                } else {
+                    baseAttributes
+                }
                 val channelName = extractChannelName(info)
-                
+
                 if (channelName.isEmpty()) return null
-                
+
                 // Genera ID univoco
                 val channelId = generateChannelId(channelName, url)
-                
+
                 // Estrai numero canale
-                val channelNumber = attributes["tvg-chno"]?.toIntOrNull() 
-                    ?: attributes["channel-id"]?.toIntOrNull() 
+                val channelNumber = attributes["tvg-chno"]?.toIntOrNull()
+                    ?: attributes["channel-id"]?.toIntOrNull()
                     ?: defaultNumber
-                
+
                 return Channel.createFromM3U(
                     id = channelId,
                     name = channelName,
@@ -114,7 +126,7 @@ class M3UParser {
             val matcher = pattern.matcher(info)
             
             while (matcher.find()) {
-                name = name.replace(matcher.group(0), "")
+                name = name.replace(matcher.group(0) ?: "", "")
             }
             
             // Pulisci il nome
